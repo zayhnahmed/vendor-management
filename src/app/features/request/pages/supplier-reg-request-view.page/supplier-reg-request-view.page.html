@@ -1,0 +1,691 @@
+<div
+  class="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 bg-repeat-y bg-right"
+  style="background-image: url('https://placehold.co/4x400/f9fafb/white?text=')"
+>
+  @if (reqDetail$ | async; as reqDetail) {
+    <div class="flex flex-col gap-8 max-w-5xl mx-auto">
+      <!-- Page Header -->
+      <div>
+        <h1 class="text-2xl font-semibold text-gray-900">Suppliers Registration Review</h1>
+        <p class="text-sm text-gray-500 mt-1">
+          Review and validate the submitted suppliers registration form.
+        </p>
+      </div>
+
+      <!-- GENERAL INFORMATION SECTION -->
+      @if (reqDetail.step1Data) {
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sm:p-7 lg:p-8">
+          <div class="border-b border-gray-200 pb-4 mb-5">
+            <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">General Information</h2>
+          </div>
+
+          <!-- Application Overview -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Application Overview</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Registration ID
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.registrationRequest.registrationNumber }}
+                </div>
+              </div>
+
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Date submitted
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.completedAt | date }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+
+          <!-- Company Information -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Company information</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Company Full Name
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.companyLegalName }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Trade Name
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.tradeName }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Year of Establishment
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.yearOfEstablishment }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Business Address
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.registeredAddress }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Operational Address
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.operationalAddress }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Country of Registration
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.countryOfRegistration }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Website URL
+                </div>
+                <div class="text-base text-blue-600 mt-1">
+                  {{ reqDetail.step1Data.companyWebsite }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+
+          <!-- Point of Contact -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Point of contact</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Key contact Person
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.primaryContactName }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">Email</div>
+                <div class="text-base text-blue-600 mt-1">
+                  {{ reqDetail.step1Data.primaryContactEmail }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Mobile number
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.primaryContactPhone }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Position
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.designation }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Alternate Contact Person
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.alternateContactName || 'Not provided' }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Alternate Phone Number
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step1Data.alternateContactPhone || 'Not provided' }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+
+          <!-- Entity Type -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Entity Type</h3>
+            <div class="flex flex-wrap gap-3">
+              @for (entity of entityTypes; track $index) {
+                <span
+                  class="px-4 py-2 rounded-full text-sm"
+                  [ngClass]="
+                    entity.value === reqDetail.step1Data.entityType
+                      ? 'bg-brand text-white'
+                      : 'bg-gray-50 text-gray-500'
+                  "
+                >
+                  {{ entity.label }}
+                </span>
+              }
+            </div>
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+
+          <!-- Vendor Business Type -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Vendor Business Type</h3>
+            <div class="flex flex-wrap gap-3">
+              @for (type of businessTypes; track type.value) {
+                <span
+                  class="px-4 py-2 rounded-full text-sm cursor-pointer"
+                  [ngClass]="
+                    reqDetail.step1Data.businessType.includes(type.value)
+                      ? 'bg-brand text-white font-medium px-5'
+                      : 'bg-gray-50 text-gray-500'
+                  "
+                >
+                  {{ type.label }}
+                </span>
+              }
+            </div>
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+
+          <!-- Scope of Services -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-2">Scope of Services</h3>
+            <div class="flex flex-wrap gap-2">
+              @for (service of reqDetail.registrationRequest.scopeOfServices; track $index) {
+                <span class="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-sm">{{
+                  service | titlecase
+                }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+
+          <!-- Local Content -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Local Content</h3>
+            <div class="mb-4">
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                <div class="text-sm text-gray-700 pr-4 max-w-md">
+                  Do you have Regional Headquarters Registered in KSA?
+                </div>
+                <div class="flex items-center gap-4">
+                  <!-- YES -->
+                  <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                    <span
+                      class="w-3 h-3 rounded-full inline-block"
+                      [ngClass]="
+                        reqDetail.registrationRequest.hasRegionalHQ ? 'bg-green-600' : 'bg-gray-300'
+                      "
+                    ></span>
+                    Yes
+                  </span>
+
+                  <!-- NO -->
+                  <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                    <span
+                      class="w-3 h-3 rounded-full inline-block"
+                      [ngClass]="
+                        !reqDetail.registrationRequest.hasRegionalHQ ? 'bg-red-500' : 'bg-gray-300'
+                      "
+                    ></span>
+                    No
+                  </span>
+                </div>
+              </div>
+              <p class="text-xs text-gray-400 mt-2 max-w-lg">
+                The Regional Headquarters (RHQ) certificate number is not the commercial
+                registration certificate number. The RHQ certificate number is only issued
+                exclusively by the Ministry of Investment of Saudi Arabia (MISA).
+              </p>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="text-sm text-gray-700">
+                Do you have Local Content Certificate from LCGPA?
+              </div>
+              <div class="flex items-center gap-4">
+                <!-- YES -->
+                <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                  <span
+                    class="w-3 h-3 rounded-full inline-block"
+                    [ngClass]="
+                      reqDetail.registrationRequest.hasLocalContentCert
+                        ? 'bg-green-600'
+                        : 'bg-gray-300'
+                    "
+                  ></span>
+                  Yes
+                </span>
+
+                <!-- NO -->
+                <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                  <span
+                    class="w-3 h-3 rounded-full inline-block"
+                    [ngClass]="
+                      !reqDetail.registrationRequest.hasLocalContentCert
+                        ? 'bg-red-500'
+                        : 'bg-gray-300'
+                    "
+                  ></span>
+                  No
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Statement of Declaration -->
+          <div class="mb-4">
+            <h3 class="text-sm font-medium text-gray-500 mb-2">Statement of Declaration</h3>
+            <div class="bg-gray-50 p-4 rounded-lg flex items-start gap-3">
+              <svg
+                class="w-5 h-5 text-green-600 mt-0.5 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              <span class="text-sm text-gray-700"
+                >I hereby certify that, as of the above date, the information provided in this
+                company's registration statement is true and sufficiently complete so as not to be
+                misleading.</span
+              >
+            </div>
+            <div
+              class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-4 flex items-start gap-2"
+            >
+              <svg
+                class="w-4 h-4 text-yellow-600 mt-0.5 shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span class="text-xs text-gray-600"
+                >Make sure all submitted documents are thoroughly reviewed before making a
+                decision.</span
+              >
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- FINANCIAL INFORMATION SECTION -->
+      @if (reqDetail.step2Data) {
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sm:p-7 lg:p-8">
+          <div class="border-b border-gray-200 pb-4 mb-5">
+            <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">Financial Information</h2>
+          </div>
+
+          <!-- Bank Details -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Bank Details</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Bank Name
+                </div>
+                <div class="text-base text-gray-900 mt-1">{{ reqDetail.step2Data.bankName }}</div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Account Holder Name
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step2Data.accountHolderName }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  SWIFT/IFSC Code
+                </div>
+                <div class="text-base text-gray-900 mt-1">{{ reqDetail.step2Data.bankCode }}</div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Bank Country
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step2Data.bankCountry }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Account Number / IBAN
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step2Data.accountNumber }} / {{ reqDetail.step2Data.iban }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Currency
+                </div>
+                <div class="text-base text-gray-900 mt-1">{{ reqDetail.step2Data.currency }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+
+          <!-- Tax Information -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Tax Information</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8 mb-6">
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Tax Registration Number
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step2Data.taxRegistrationNumber }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  VAT / CST Number
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step2Data.vatGstNumber }}
+                </div>
+              </div>
+            </div>
+            @if (documents$ | async; as documents) {
+              @if (documents.length > 0) {
+                @for (doc of documents$ | async; track $index) {
+                  <div class="text-sm text-gray-600 mb-2">VAT Certificate is listed</div>
+                  <div
+                    class="border border-gray-200 rounded-xl p-4 cursor-pointer"
+                    (click)="openFile(doc?.file?.url ?? '')"
+                  >
+                    <p class="font-medium text-gray-800">{{ doc?.label }}</p>
+                    <p class="text-sm text-gray-500 mt-1">{{ doc?.file?.fileName }}</p>
+                    <div
+                      class="flex justify-between text-xs text-gray-400 mt-3 pt-2 border-t border-gray-100"
+                    >
+                      <span>{{ (doc?.file?.fileSize ?? 0) / 1024 | number: '1.0-1' }} KB</span>
+                      <span>{{ doc?.file?.uploadedAt | date }}</span>
+                    </div>
+                  </div>
+                }
+              }
+            }
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+
+          <!-- Financial Capability -->
+          <div class="mb-3">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Financial Capability</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8 mb-4">
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Annual Turnover
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step2Data.annualTurnover | currency: 'SAR ' }}
+                </div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Years in Business
+                </div>
+                <div class="text-base text-gray-900 mt-1">
+                  {{ reqDetail.step2Data.yearsInBusiness }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- QUALITY & COMPLIANCE SECTION -->
+      @if (reqDetail.step3Data) {
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sm:p-7 lg:p-8">
+          <div class="border-b border-gray-200 pb-4 mb-5">
+            <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">Quality & Compliance</h2>
+          </div>
+
+          <!-- Certifications -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Certifications</h3>
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+              Company Legal Name
+            </div>
+            <div class="space-y-2">
+              @for (cert of certifications$ | async; track cert.id) {
+                <div
+                  class="border border-gray-200 rounded-lg p-3 bg-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                >
+                  <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                      />
+                    </svg>
+                    <span class="text-sm text-gray-700">{{ cert.file.fileName }}</span>
+                    <span class="text-xs text-gray-400"
+                      >{{ (cert?.file?.fileSize ?? 0) / 1024 | number: '1.0-1' }} KB</span
+                    >
+                  </div>
+                  <button
+                    (click)="downloadFile(cert.file.url)"
+                    class="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    Download
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+
+          <!-- Financial Capability (Compliance) -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Financial Capability</h3>
+            <div class="space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <span class="text-sm text-gray-700">Comply with local labor laws?</span>
+                <div class="flex items-center gap-4">
+                  <!-- YES -->
+                  <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                    <span
+                      class="w-3 h-3 rounded-full inline-block"
+                      [ngClass]="
+                        reqDetail.step3Data.compliesWithLaborLaws ? 'bg-green-600' : 'bg-gray-300'
+                      "
+                    ></span>
+                    Yes
+                  </span>
+
+                  <!-- NO -->
+                  <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                    <span
+                      class="w-3 h-3 rounded-full inline-block"
+                      [ngClass]="
+                        !reqDetail.step3Data.compliesWithLaborLaws ? 'bg-red-500' : 'bg-gray-300'
+                      "
+                    ></span>
+                    No
+                  </span>
+                </div>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <span class="text-sm text-gray-700">HSE policy available?</span>
+                <div class="flex items-center gap-4">
+                  <!-- YES -->
+                  <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                    <span
+                      class="w-3 h-3 rounded-full inline-block"
+                      [ngClass]="reqDetail.step3Data.hasHSEPolicy ? 'bg-green-600' : 'bg-gray-300'"
+                    ></span>
+                    Yes
+                  </span>
+
+                  <!-- NO -->
+                  <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                    <span
+                      class="w-3 h-3 rounded-full inline-block"
+                      [ngClass]="!reqDetail.step3Data.hasHSEPolicy ? 'bg-red-500' : 'bg-gray-300'"
+                    ></span>
+                    No
+                  </span>
+                </div>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <span class="text-sm text-gray-700"
+                  >Any legal compliance issues in last 3 years?</span
+                >
+                <div class="flex items-center gap-4">
+                  <!-- YES -->
+                  <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                    <span
+                      class="w-3 h-3 rounded-full inline-block"
+                      [ngClass]="
+                        reqDetail.step3Data.hasLegalIssues ? 'bg-green-600' : 'bg-gray-300'
+                      "
+                    ></span>
+                    Yes
+                  </span>
+
+                  <!-- NO -->
+                  <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                    <span
+                      class="w-3 h-3 rounded-full inline-block"
+                      [ngClass]="!reqDetail.step3Data.hasLegalIssues ? 'bg-red-500' : 'bg-gray-300'"
+                    ></span>
+                    No
+                  </span>
+                </div>
+              </div>
+              <div>
+                <span class="text-sm text-gray-700">Explanation (if Yes)</span>
+              </div>
+            </div>
+            @if (reqDetail.step3Data.hasLegalIssues && reqDetail.step3Data.legalIssuesExplanation) {
+              <div class="mt-3 bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <span class="text-sm font-medium text-gray-600">Explanation</span>
+                <p class="text-sm text-gray-700 mt-1">
+                  {{ reqDetail.step3Data.legalIssuesExplanation }}
+                </p>
+              </div>
+            }
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+
+          <!-- Ethics & ESG -->
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-3">Ethics & ESG</h3>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+              <span class="text-sm text-gray-700">Anti-bribery policy available?</span>
+              <div class="flex items-center gap-4">
+                <!-- YES -->
+                <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                  <span
+                    class="w-3 h-3 rounded-full inline-block"
+                    [ngClass]="
+                      reqDetail.step3Data.hasAntiBriberyPolicy ? 'bg-green-600' : 'bg-gray-300'
+                    "
+                  ></span>
+                  Yes
+                </span>
+
+                <!-- NO -->
+                <span class="inline-flex items-center gap-1.5 text-sm text-gray-700">
+                  <span
+                    class="w-3 h-3 rounded-full inline-block"
+                    [ngClass]="
+                      !reqDetail.step3Data.hasAntiBriberyPolicy ? 'bg-red-500' : 'bg-gray-300'
+                    "
+                  ></span>
+                  No
+                </span>
+              </div>
+            </div>
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+              Sustainability practices
+            </div>
+            <div class="flex flex-wrap gap-2">
+              @for (practice of reqDetail.step3Data.sustainabilityPractices; track practice) {
+                <div class="flex items-center gap-2">
+                  <svg
+                    class="w-4 h-4 text-green-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span class="text-sm text-gray-700">{{ practice }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="border-t border-gray-100 my-5"></div>
+        </div>
+
+        <!-- Final Action Buttons -->
+        <div class="flex justify-end mt-2">
+          @if (reqDetail.user.vendorStatus === VendorStatus.PENDING_APPROVAL) {
+            <div class="flex justify-end">
+              <button (click)="onClickApprove()" appVendButton>Approve</button>
+            </div>
+          }
+          <!-- <div class="flex gap-3 flex-wrap">
+            <button
+              class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
+            >
+              ✓ Approve Registration
+            </button>
+            <button
+              class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
+            >
+              📋 Request More Info
+            </button>
+            <button
+              class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
+            >
+              ✗ Reject Registration
+            </button>
+          </div> -->
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,483 @@
+<form [formGroup]="vendorForm" (ngSubmit)="onSubmit()">
+  <!-- CONTENT AREA -->
+  <div class="px-8 py-8 flex flex-col gap-6">
+    <div>
+      <h2 class="text-lg sm:text-2xl font-bold text-gray-800 mb-1">General Information</h2>
+      <p class="text-sm text-gray-500">
+        Provide basic company details to complete your vendor profile.
+      </p>
+    </div>
+
+    <!-- COMPANY DETAILS CARD -->
+    <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">Company Details</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6">
+        <!-- Company Legal Name -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="company_legal_name" class="block text-sm font-medium text-heading">
+            Company Full Name*
+          </label>
+          <input
+            type="text"
+            id="company_legal_name"
+            formControlName="companyLegalName"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="Enter company legal name"
+          />
+          @if (
+            vendorForm.get('companyLegalName')?.invalid &&
+            vendorForm.get('companyLegalName')?.touched
+          ) {
+            <div class="text-red-500 text-xs mt-1">Company legal name is required.</div>
+          }
+        </div>
+
+        <!-- Country of Registration -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="country_registration" class="block text-sm font-medium text-heading">
+            Country of Registration*
+          </label>
+          <select
+            id="country_registration"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+            formControlName="countryOfRegistration"
+          >
+            <option value="">Select country</option>
+            <option value="Saudi Arabia">Saudi Arabia</option>
+            <option value="UAE">UAE</option>
+            <option value="Qatar">Qatar</option>
+            <option value="Kuwait">Kuwait</option>
+            <option value="Bahrain">Bahrain</option>
+            <option value="Oman">Oman</option>
+          </select>
+          @if (
+            vendorForm.get('countryOfRegistration')?.invalid &&
+            vendorForm.get('countryOfRegistration')?.touched
+          ) {
+            <div class="text-red-500 text-xs mt-1">Country of registration is required.</div>
+          }
+        </div>
+
+        <!-- Registration Number -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="registration_number" class="block text-sm font-medium text-heading">
+            Registration Number*
+          </label>
+          <input
+            type="text"
+            id="registration_number"
+            formControlName="companyRegistrationNumber"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="Enter registration number"
+          />
+          @if (
+            vendorForm.get('companyRegistrationNumber')?.invalid &&
+            vendorForm.get('companyRegistrationNumber')?.touched
+          ) {
+            <div class="text-red-500 text-xs mt-1">Registration number is required.</div>
+          }
+        </div>
+
+        <!-- Trade Name (New) -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="trade_name" class="block text-sm font-medium text-heading">
+            Trade Name*
+          </label>
+          <input
+            type="text"
+            id="trade_name"
+            formControlName="tradeName"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="Enter trade name"
+          />
+          @if (vendorForm.get('tradeName')?.invalid && vendorForm.get('tradeName')?.touched) {
+            <div class="text-red-500 text-xs mt-1">Trade name is required.</div>
+          }
+        </div>
+
+        <!-- Year of Establishment (New) -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="year_of_establishment" class="block text-sm font-medium text-heading">
+            Year of Establishment*
+          </label>
+          <input
+            type="number"
+            id="year_of_establishment"
+            formControlName="yearOfEstablishment"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="Enter year (e.g., 2005)"
+          />
+          @if (
+            vendorForm.get('yearOfEstablishment')?.invalid &&
+            vendorForm.get('yearOfEstablishment')?.touched
+          ) {
+            <div class="text-red-500 text-xs mt-1">Valid year of establishment is required.</div>
+          }
+        </div>
+
+        <!-- Website URL (renamed to companyWebsite) -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="website_url" class="block text-sm font-medium text-heading">
+            Website URL*
+          </label>
+          <input
+            type="url"
+            id="website_url"
+            formControlName="companyWebsite"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="https://www.example.com"
+          />
+          @if (
+            vendorForm.get('companyWebsite')?.invalid && vendorForm.get('companyWebsite')?.touched
+          ) {
+            <div class="text-red-500 text-xs mt-1">Valid website URL is required.</div>
+          }
+        </div>
+      </div>
+
+      <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+    </div>
+
+    <!-- Entity Type Section -->
+    <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">Entity Type</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="radio"
+            formControlName="entityType"
+            [value]="EntityType.GOVERNMENT"
+            class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Government</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="radio"
+            formControlName="entityType"
+            [value]="EntityType.PRIVATE"
+            class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Private</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="radio"
+            formControlName="entityType"
+            [value]="EntityType.PUBLIC"
+            class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Public</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="radio"
+            formControlName="entityType"
+            [value]="EntityType.PIFRELATED"
+            class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">PIF Related Party</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="radio"
+            formControlName="entityType"
+            [value]="EntityType.INDIVIDUAL"
+            class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Individual</span>
+        </label>
+      </div>
+      @if (vendorForm.get('entityType')?.invalid && vendorForm.get('entityType')?.touched) {
+        <div class="text-red-500 text-xs mt-2">Entity type is required.</div>
+      }
+
+      <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+    </div>
+
+    <!-- Vendor Business Type Section -->
+    <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">
+        Vendor Business Type
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            [checked]="vendorForm.get('businessType')?.value?.includes(BusinessType.CONTRACTOR)"
+            (change)="onBusinessTypeChange(BusinessType.CONTRACTOR, $event)"
+            class="w-4 h-4 border border-default-medium rounded-xs bg-white focus:ring-2 focus:ring-brand-soft cursor-pointer"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Contractor</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            [checked]="vendorForm.get('businessType')?.value?.includes(BusinessType.CONSULTANT)"
+            (change)="onBusinessTypeChange(BusinessType.CONSULTANT, $event)"
+            class="w-4 h-4 border border-default-medium rounded-xs bg-white focus:ring-2 focus:ring-brand-soft cursor-pointer"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Consultant</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            [checked]="vendorForm.get('businessType')?.value?.includes(BusinessType.SUPPLIER)"
+            (change)="onBusinessTypeChange(BusinessType.SUPPLIER, $event)"
+            class="w-4 h-4 border border-default-medium rounded-xs bg-white focus:ring-2 focus:ring-brand-soft cursor-pointer"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Supplier</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            [checked]="vendorForm.get('businessType')?.value?.includes(BusinessType.FFF_OSE)"
+            (change)="onBusinessTypeChange(BusinessType.FFF_OSE, $event)"
+            class="w-4 h-4 border border-default-medium rounded-xs bg-white focus:ring-2 focus:ring-brand-soft cursor-pointer"
+          />
+          <span class="text-sm text-gray-700 leading-tight">FFF & OSE</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            [checked]="vendorForm.get('businessType')?.value?.includes(BusinessType.SOLE_TRADER)"
+            (change)="onBusinessTypeChange(BusinessType.SOLE_TRADER, $event)"
+            class="w-4 h-4 border border-default-medium rounded-xs bg-white focus:ring-2 focus:ring-brand-soft cursor-pointer"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Freelancer</span>
+        </label>
+      </div>
+      @if (vendorForm.get('businessType')?.invalid && vendorForm.get('businessType')?.touched) {
+        <div class="text-red-500 text-xs mt-2">At least one business type must be selected.</div>
+      }
+
+      <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+    </div>
+
+    <!-- Address Information Section -->
+    <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">
+        Address Information
+      </h2>
+
+      <div class="flex flex-col gap-3 sm:gap-4">
+        <!-- Registered Address -->
+        <div class="space-y-1.5 sm:space-y-2 sm:col-span-2">
+          <label for="registered_address" class="block text-sm font-medium text-heading">
+            Registered Address*
+          </label>
+          <textarea
+            id="registered_address"
+            rows="3"
+            formControlName="registeredAddress"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body"
+            placeholder="Enter full business address"
+          ></textarea>
+          @if (
+            vendorForm.get('registeredAddress')?.invalid &&
+            vendorForm.get('registeredAddress')?.touched
+          ) {
+            <div class="text-red-500 text-xs mt-1">Registered address is required.</div>
+          }
+        </div>
+
+        <!-- Operational Address -->
+        <div class="space-y-1.5 sm:space-y-2 sm:col-span-2">
+          <label for="operational_address" class="block text-sm font-medium text-heading">
+            Operational Address (If Different)
+          </label>
+          <textarea
+            id="operational_address"
+            rows="3"
+            formControlName="operationalAddress"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body"
+            placeholder="Enter full business address"
+          ></textarea>
+        </div>
+
+        <!-- Is Operational Same Checkbox (New) -->
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input
+            id="same-address"
+            type="checkbox"
+            formControlName="isOperationalSame"
+            class="w-4 h-4 border border-default-medium rounded-xs bg-white focus:ring-2 focus:ring-brand-soft cursor-pointer"
+          />
+          <span class="select-none">Same as registered address</span>
+        </label>
+      </div>
+      <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+    </div>
+
+    <!-- Point of Contact Section -->
+    <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">Point of Contact</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6">
+        <!-- Primary Contact Name -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="primary_contact_name" class="block text-sm font-medium text-heading">
+            Primary Contact Name*
+          </label>
+          <input
+            type="text"
+            id="primary_contact_name"
+            formControlName="primaryContactName"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="Enter full name"
+          />
+          @if (
+            vendorForm.get('primaryContactName')?.invalid &&
+            vendorForm.get('primaryContactName')?.touched
+          ) {
+            <div class="text-red-500 text-xs mt-1">Primary contact name is required.</div>
+          }
+        </div>
+
+        <!-- Designation -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="designation" class="block text-sm font-medium text-heading">
+            Designation*
+          </label>
+          <input
+            type="text"
+            id="designation"
+            formControlName="designation"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="Enter job title"
+          />
+          @if (vendorForm.get('designation')?.invalid && vendorForm.get('designation')?.touched) {
+            <div class="text-red-500 text-xs mt-1">Designation is required.</div>
+          }
+        </div>
+
+        <!-- Primary Contact Email -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="primary_contact_email" class="block text-sm font-medium text-heading">
+            Email*
+          </label>
+          <input
+            type="email"
+            id="primary_contact_email"
+            formControlName="primaryContactEmail"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="email@example.com"
+          />
+          @if (
+            vendorForm.get('primaryContactEmail')?.invalid &&
+            vendorForm.get('primaryContactEmail')?.touched
+          ) {
+            <div class="text-red-500 text-xs mt-1">Valid email is required.</div>
+          }
+        </div>
+
+        <!-- Primary Contact Phone -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="primary_contact_phone" class="block text-sm font-medium text-heading">
+            Phone Number*
+          </label>
+          <input
+            type="tel"
+            id="primary_contact_phone"
+            formControlName="primaryContactPhone"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="+966 50 000 0000"
+          />
+          @if (
+            vendorForm.get('primaryContactPhone')?.invalid &&
+            vendorForm.get('primaryContactPhone')?.touched
+          ) {
+            <div class="text-red-500 text-xs mt-1">Phone number is required.</div>
+          }
+        </div>
+
+        <!-- Alternate Contact Name (New) -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="alternate_contact_name" class="block text-sm font-medium text-heading">
+            Alternate Contact Name
+          </label>
+          <input
+            type="text"
+            id="alternate_contact_name"
+            formControlName="alternateContactName"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="Enter alternate contact name"
+          />
+        </div>
+
+        <!-- Alternate Contact Phone (New) -->
+        <div class="space-y-1.5 sm:space-y-2">
+          <label for="alternate_contact_phone" class="block text-sm font-medium text-heading">
+            Alternate Contact Phone
+          </label>
+          <input
+            type="tel"
+            id="alternate_contact_phone"
+            formControlName="alternateContactPhone"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+            placeholder="+966 50 000 0000"
+          />
+        </div>
+      </div>
+
+      <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+    </div>
+
+    <div class="flex justify-end py-6">
+      <button
+        type="submit"
+        class="inline-flex items-center text-white bg-linear-to-r from-brand-500 via-brand to-gray-600 hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-brand-300 dark:focus:ring-brand-800 font-medium rounded-base text-sm px-6 py-2.5 text-center leading-5"
+      >
+        Next
+        <svg
+          class="w-4 h-4 ms-1.5 -me-0.5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 12H5m14 0-4 4m4-4-4-4"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,257 @@
+<div
+  class="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 bg-repeat-y bg-right"
+  style="background-image: url('https://placehold.co/4x400/f9fafb/white?text=')"
+>
+  @if (reqDetail$ | async; as reqDetail) {
+    <div class="flex flex-col gap-8 max-w-5xl mx-auto">
+      <!-- COMPANY DETAILS SECTION -->
+      <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sm:p-7 lg:p-8">
+        <div class="border-b border-gray-200 pb-4 mb-5">
+          <h2 class="text-xl font-semibold text-gray-800">Company Details</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-7 gap-y-6">
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+              Company Full Name
+            </div>
+            <div class="text-base text-gray-900 mt-1">{{ reqDetail.companyFullName }}</div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+              Country of Registration
+            </div>
+            <div class="text-base text-gray-800 mt-1">{{ reqDetail.countryOfRegistration }}</div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+              Registration Number
+            </div>
+            <div class="text-base text-gray-800 mt-1">{{ reqDetail.registrationNumber }}</div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+              HQ Office Location
+            </div>
+            <div class="text-base text-gray-800 mt-1">
+              {{ reqDetail.hqOfficeLocation }}
+            </div>
+          </div>
+          <div class="sm:col-span-2">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+              Business Address
+            </div>
+            <div class="text-base text-gray-800 mt-1">
+              {{ reqDetail.businessAddress }}
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+              Last Year Turnover
+            </div>
+            <div class="text-base text-gray-800 mt-1">
+              {{ reqDetail.turnoverLastYear | currency: 'SAR ' }}
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">Website URL</div>
+            <div class="text-base text-blue-600 mt-1 break-all">{{ reqDetail.websiteUrl }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POINT OF CONTACT -->
+      <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sm:p-7 lg:p-8">
+        <div class="border-b border-gray-200 pb-4 mb-5">
+          <h2 class="text-xl font-semibold text-gray-800">Point of Contact</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-7 gap-y-6">
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase">Key Contact Person</div>
+            <div class="text-base text-gray-900 mt-1">{{ reqDetail.keyContactPerson }}</div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase">Position</div>
+            <div class="text-base text-gray-800 mt-1">{{ reqDetail.position }}</div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase">Email Address</div>
+            <div class="text-base text-gray-800 mt-1">{{ reqDetail.email }}</div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase">Phone Number</div>
+            <div class="text-base text-gray-800 mt-1">{{ reqDetail.phoneNumber }}</div>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-gray-500 uppercase">Mobile Number</div>
+            <div class="text-base text-gray-800 mt-1">{{ reqDetail.mobileNumber }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTITY TYPE -->
+      <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sm:p-7">
+        <div class="border-b border-gray-200 pb-4 mb-5">
+          <h2 class="text-xl font-semibold text-gray-800">Entity Type</h2>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          @for (entity of entityTypes; track $index) {
+            <span
+              class="px-4 py-2 rounded-full text-sm"
+              [ngClass]="
+                entity.value === reqDetail.entityType
+                  ? 'bg-brand text-white'
+                  : 'bg-gray-50 text-gray-500'
+              "
+            >
+              {{ entity.label }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <!-- VENDOR BUSINESS TYPE -->
+      <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sm:p-7">
+        <div class="border-b border-gray-200 pb-4 mb-5">
+          <h2 class="text-xl font-semibold text-gray-800">Vendor Business Type</h2>
+        </div>
+        <div class="flex flex-wrap gap-3 mb-6">
+          @for (type of businessTypes; track type.value) {
+            <span
+              class="px-4 py-2 rounded-full text-sm cursor-pointer"
+              [ngClass]="
+                type.value === reqDetail.businessType
+                  ? 'bg-brand text-white font-medium px-5'
+                  : 'bg-gray-50 text-gray-500'
+              "
+            >
+              {{ type.label }}
+            </span>
+          }
+        </div>
+
+        <div class="border-t border-gray-100 pt-5">
+          <h3 class="font-medium text-gray-700 mb-3">Scope of Service</h3>
+          <div class="flex flex-wrap gap-2">
+            @for (service of reqDetail.scopeOfServices; track $index) {
+              <span class="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-sm">{{
+                service | titlecase
+              }}</span>
+            }
+          </div>
+          <p class="text-xs text-gray-400 mt-2">3 service categories selected</p>
+        </div>
+      </div>
+
+      <!-- LOCAL CONTENT -->
+      <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sm:p-7">
+        <div class="border-b border-gray-200 pb-4 mb-5">
+          <h2 class="text-xl font-semibold text-gray-800">Local Content</h2>
+        </div>
+
+        <div class="mb-6 pb-4 border-b border-gray-100">
+          <p class="text-sm font-medium text-gray-700 mb-1">Regional Headquarters (RHQ) in KSA?</p>
+
+          <p class="text-sm text-gray-600 mb-2">
+            {{ reqDetail.hasRegionalHQ ? 'Yes, RHQ Certificate issued' : 'No (Not Provided)' }}
+          </p>
+
+          @if (reqDetail.hasRegionalHQ) {
+            <div class="mt-2">
+              <span class="text-xs text-gray-500">RHQ Certificate Number:</span>
+              <span class="text-sm font-mono text-gray-700 ml-2">
+                {{ reqDetail.regionalHQCertificate }}
+              </span>
+            </div>
+          }
+        </div>
+
+        <div class="mb-6 pb-4 border-b border-gray-100">
+          <p class="text-sm font-medium text-gray-700 mb-1">
+            Local Content Certificate from LCGPA?
+          </p>
+
+          <p class="text-sm text-gray-600 mb-2">
+            {{
+              reqDetail.hasLocalContentCert ? 'Yes, RHQ Certificate issued' : 'No (Not Provided)'
+            }}
+          </p>
+
+          @if (reqDetail.hasLocalContentCert) {
+            <div class="mt-2">
+              <span class="text-xs text-gray-500">LCGPA Certificate Number:</span>
+              <span class="text-sm font-mono text-gray-700 ml-2">
+                {{ reqDetail.localContentCert }}
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- DOCUMENTS & ATTACHMENTS -->
+      <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sm:p-7">
+        <div class="border-b border-gray-200 pb-4 mb-5">
+          <h2 class="text-xl font-semibold text-gray-800">Documents & Attachments</h2>
+        </div>
+        <p class="text-sm text-gray-500 mb-5">Formats: JPEG, JPG, PDF, PNG — Max size: 5 MB</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          @for (doc of documents$ | async; track $index) {
+            <div
+              class="border border-gray-200 rounded-xl p-4 cursor-pointer"
+              (click)="openFile(doc?.file?.url ?? '')"
+            >
+              <p class="font-medium text-gray-800">{{ doc?.label }}</p>
+              <p class="text-sm text-gray-500 mt-1">{{ doc?.file?.fileName }}</p>
+              <div
+                class="flex justify-between text-xs text-gray-400 mt-3 pt-2 border-t border-gray-100"
+              >
+                <span>{{ (doc?.file?.fileSize ?? 0) / 1024 | number: '1.0-1' }} KB</span>
+                <span>{{ doc?.file?.uploadedAt | date }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- STATEMENT OF DECLARATION -->
+      <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sm:p-7">
+        <div class="border-b border-gray-200 pb-4 mb-5">
+          <h2 class="text-xl font-semibold text-gray-800">Statement of Declaration</h2>
+        </div>
+
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <p class="text-green-700 font-medium mb-2">✓ Declaration Accepted</p>
+          <p class="text-gray-600 text-sm">
+            "I hereby certify that, as of the above date, the information provided in this company's
+            registration statement is true and sufficiently complete so as not to be misleading."
+          </p>
+          <div class="flex flex-wrap gap-4 mt-3 text-xs text-gray-500">
+            <span>Abdullah Al-Rashid (Authorized Signatory)</span>
+            <span>Declared on March 25, 2025</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBMISSION STATUS -->
+      <div
+        class="bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-wrap justify-between items-center"
+      >
+        <div>
+          <p class="text-xs text-gray-500 uppercase tracking-wide">Application ID</p>
+          <p class="font-mono text-sm font-medium">{{ reqDetail.applicationId }}</p>
+        </div>
+        <div>
+          <span class="text-sm text-gray-700">Status: </span>
+          <span class="text-sm font-medium text-green-700">{{ reqDetail.status | titlecase }}</span>
+        </div>
+        <div class="text-xs text-gray-400">Last updated: {{ reqDetail.lastUpdatedAt | date }}</div>
+      </div>
+
+      @if (reqDetail.status === 'SUBMITTED') {
+        <div class="flex justify-end">
+          <button (click)="onClickApprove()" appVendButton>Approve</button>
+        </div>
+      }
+    </div>
+  }
+</div>

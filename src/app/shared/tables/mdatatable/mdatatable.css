@@ -1,0 +1,110 @@
+/* Add to your component's CSS file */
+::ng-deep .datatable-container {
+  font-family: inherit;
+}
+
+::ng-deep .dataTable-wrapper {
+  margin-top: 1rem;
+}
+
+::ng-deep .dataTable-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+}
+
+::ng-deep .dataTable-search input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+::ng-deep .dataTable-search input:focus {
+  ring: 2px solid #3b82f6;
+  border-color: #3b82f6;
+}
+
+::ng-deep .dataTable-selector {
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  background-color: white;
+  cursor: pointer;
+}
+
+::ng-deep .dataTable-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e5e7eb;
+}
+
+::ng-deep .dataTable-table thead th {
+  padding: 0.75rem 1rem;
+  background-color: #f9fafb;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+::ng-deep .dataTable-table tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  color: #374151;
+}
+
+::ng-deep .dataTable-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+::ng-deep .dataTable-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+::ng-deep .dataTable-pagination {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+::ng-deep .dataTable-pagination a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  background-color: white;
+  color: #4b5563;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+::ng-deep .dataTable-pagination a:hover {
+  background-color: #f3f4f6;
+}
+
+::ng-deep .dataTable-pagination .active a {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}

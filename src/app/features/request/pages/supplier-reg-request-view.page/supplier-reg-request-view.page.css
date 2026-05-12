@@ -1,0 +1,22 @@
+/* subtle custom styles to match original design spirit */
+.info-row {
+  transition: all 0.1s ease;
+}
+.badge-doc {
+  background: #eff6ff;
+  color: #1e40af;
+}
+.entity-badge-active,
+.business-badge-active {
+  background: #e6f7e6;
+  border: 1px solid #2e7d32;
+  color: #1e5b2e;
+}
+.card-hover {
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.2s ease;
+}
+hr.divider-light {
+  border-color: rgba(0, 0, 0, 0.08);
+}

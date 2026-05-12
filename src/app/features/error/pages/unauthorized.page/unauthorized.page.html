@@ -1,0 +1,102 @@
+<div
+  class="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4"
+>
+  <div class="w-full max-w-lg">
+    <!-- Animated Card -->
+    <div class="relative">
+      <!-- Decorative Elements -->
+      <div
+        class="absolute -top-10 -left-10 w-32 h-32 bg-red-100 rounded-full opacity-50 blur-2xl"
+      ></div>
+      <div
+        class="absolute -bottom-10 -right-10 w-32 h-32 bg-red-100 rounded-full opacity-50 blur-2xl"
+      ></div>
+
+      <!-- Main Card -->
+      <div class="relative bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Top Accent Bar -->
+        <div class="h-2 bg-linear-to-r from-brand-500 to-brand-800"></div>
+
+        <div class="p-8 sm:p-10 text-center">
+          <!-- Animated Icon -->
+          <div class="relative mb-6">
+            <div
+              class="absolute inset-0 bg-red-100 rounded-full blur-xl opacity-60 animate-pulse"
+            ></div>
+            <div
+              class="relative w-24 h-24 mx-auto bg-linear-to-br from-red-100 to-red-50 rounded-full flex items-center justify-center"
+            >
+              <svg
+                class="w-12 h-12 text-brand-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linecap="round"
+                  d="M12 15v2m-6-4h12a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2zm10-4V6a4 4 0 00-8 0v4"
+                />
+                <circle cx="12" cy="15" r="1" fill="currentColor" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Title -->
+          <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-3">Access Denied</h1>
+
+          <!-- Status Code -->
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-red-50 rounded-full mb-4">
+            <span class="w-2 h-2 bg-brand-500 rounded-full animate-pulse"></span>
+            <span class="text-xs font-medium text-brand-600 uppercase tracking-wider">Error 403</span>
+          </div>
+
+          <!-- Message -->
+          <p class="text-gray-600 mb-6 leading-relaxed">
+            You don't have permission to access this page. Please contact your administrator if you
+            believe this is a mistake.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              onclick="history.back()"
+              class="px-6 py-2.5 border-2 border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linecap="round"
+                  d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                />
+              </svg>
+              Go Back
+            </button>
+
+            <a
+              href="/"
+              class="px-6 py-2.5 bg-brand text-white font-medium rounded-xl hover:bg-brand-800 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linecap="round"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+              Back to Home
+            </a>
+          </div>
+        </div>
+
+        <!-- Footer Note -->
+        <div class="border-t border-gray-100 px-8 py-4 bg-gray-50/50">
+          <p class="text-xs text-gray-400 text-center">
+            Need assistance?
+            <a href="/contact" class="text-brand hover:underline">Contact support</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

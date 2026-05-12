@@ -1,0 +1,28 @@
+<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-90 p-6">
+    <h3 class="text-lg font-semibold mb-2">{{ title }}</h3>
+    <p class="text-sm text-gray-600 mb-5">{{ message }}</p>
+
+    <div class="flex justify-end gap-3">
+      <button
+        (click)="close(false)"
+        type="button"
+        class="text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary-soft shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none"
+      >
+        {{ cancelText }}
+      </button>
+      <button
+        (click)="close(true)"
+        type="button"
+        class="text-white box-border border border-transparent shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none focus:ring-4 focus:ring-brand-medium"
+        [ngClass]="{
+          'bg-brand hover:bg-brand-800': severity === 'brand',
+          'bg-danger hover:bg-danger-strong': severity === 'danger',
+          'bg-warning hover:bg-warning-strong': severity === 'warning',
+        }"
+      >
+        {{ confirmText }}
+      </button>
+    </div>
+  </div>
+</div>

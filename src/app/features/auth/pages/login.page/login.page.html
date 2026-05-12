@@ -1,0 +1,240 @@
+<div
+  class="bg-gray-100 w-full bg-top bg-repeat-x"
+  style="background-image: url('/images/bg-circuit.png')"
+>
+  <div class="min-h-screen max-w-7xl mx-auto flex flex-col lg:flex-row">
+    <!-- LEFT SIDE -->
+    <div class="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+      <!-- Logo -->
+      <img src="logo/arbha-logo.png" class="w-28 mb-8" />
+
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+        Welcome to Vendor & Buyer Management Portal
+      </h1>
+
+      <p class="text-gray-600 text-base md:text-lg mb-10 max-w-xl">
+        Manage vendor onboarding, collaboration, and communication in one secure platform. Choose
+        how you want to register and get started.
+      </p>
+
+      <!-- Signup -->
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold mb-1">New to our portal?</h2>
+
+        <p class="text-gray-500 mb-6">Sign up here</p>
+
+        <!-- Card -->
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 max-w-md"
+        >
+          <div class="flex gap-4 items-center">
+            <svg
+              class="w-16 h-16 text-brand"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <div>
+              <h3 class="font-bold text-lg">New Vendor Registration</h3>
+
+              <p class="text-gray-500 text-sm">Create a new vendor profile and submit documents.</p>
+            </div>
+          </div>
+
+          <button routerLink="/auth/register/supplier" appVendButton>Signup</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT LOGIN -->
+    <div class="lg:w-1/2 flex items-center justify-center p-8">
+      <div class="w-full max-w-sm rounded-3xl p-8 md:p-10 shadow-xl relative overflow-hidden">
+        <!-- Gradient overlay from bottom left to top left -->
+        <div
+          class="absolute inset-0 bg-linear-to-tl from-brand-primary-hover to-[#D9D9D9] opacity-60"
+        ></div>
+
+        <!-- Content with relative positioning to appear above gradient -->
+        <div class="relative z-10">
+          <h2
+            class="text-2xl md:text-3xl font-bold text-center mb-8 bg-linear-to-r from-gray-700 to-sky-700 bg-clip-text text-transparent"
+          >
+            LOGIN
+          </h2>
+
+          <div [formGroup]="loginForm">
+            <!-- Email Field -->
+            <div>
+              <label for="email" class="block mb-2.5 text-sm font-medium text-heading">
+                Email <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center ps-3 pointer-events-none">
+                  <svg
+                    class="w-4 h-4 text-body"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-width="2"
+                      d="m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="email"
+                  id="email"
+                  formControlName="email"
+                  class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium border text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
+                  [class.border-red-500]="isFieldInvalid('email')"
+                  [class.border-default-medium]="!isFieldInvalid('email')"
+                  placeholder="vendor@example.com"
+                />
+              </div>
+
+              <!-- Email Validation Message -->
+              @if (isFieldInvalid('email')) {
+                <p class="text-red-500 text-xs mt-1.5">
+                  {{ getEmailErrorMessage() }}
+                </p>
+              }
+            </div>
+
+            <!-- Password Field -->
+            <div class="mt-4">
+              <label for="password" class="block mb-2.5 text-sm font-medium text-heading">
+                Password <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center ps-3 pointer-events-none">
+                  <svg
+                    class="w-5 h-5 text-body"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 14v3m-3-6V7a3 3 0 1 1 6 0v4m-8 0h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  [type]="hidePassword ? 'password' : 'text'"
+                  id="password"
+                  formControlName="password"
+                  class="block w-full ps-9 pe-10 py-2.5 bg-neutral-secondary-medium border text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body"
+                  [class.border-red-500]="isFieldInvalid('password')"
+                  [class.border-default-medium]="!isFieldInvalid('password')"
+                  placeholder="******"
+                />
+
+                <!-- Toggle Password Visibility -->
+                @if (password?.value) {
+                  <button
+                    type="button"
+                    (click)="togglePasswordVisibility()"
+                    class="absolute inset-y-0 right-0 flex items-center pe-3 text-body hover:text-heading transition-colors"
+                  >
+                    @if (hidePassword) {
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                    } @else {
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                        />
+                      </svg>
+                    }
+                  </button>
+                }
+              </div>
+
+              <!-- Password Validation Message -->
+              @if (isFieldInvalid('password')) {
+                <p class="text-red-500 text-xs mt-1.5">
+                  {{ getPasswordErrorMessage() }}
+                </p>
+              }
+
+              <!-- Character count hint (optional) -->
+              @if (password?.value && password?.value.length > 0 && password?.value.length < 6) {
+                <p class="text-xs text-gray-500 mt-1">{{ password?.value.length }}/6 characters</p>
+              }
+            </div>
+
+            <!-- Remember Me and Forgot Password -->
+            <div class="flex items-center justify-between text-sm text-gray-500 mt-4">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                  id="remember-me"
+                  type="checkbox"
+                  formControlName="rememberMe"
+                  (change)="onRememberMeChange($event)"
+                  class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft cursor-pointer"
+                />
+                <span class="select-none">Remember me</span>
+              </label>
+              <a href="#" class="hover:text-brand transition text-sm">Forgot password?</a>
+            </div>
+
+            <!-- Login Button -->
+            <button
+              appVendButton
+              type="submit"
+              (click)="onSubmit()"
+              class="w-full mt-6"
+              [class.opacity-50]="loginForm.invalid"
+            >
+              Login
+            </button>
+
+            <!-- Simple Form Error Summary (only shows if form is invalid after submission attempt) -->
+            @if (loginForm.touched && loginForm.invalid) {
+              <p class="text-xs text-red-500 mt-3 text-center">
+                Please fill in all required fields correctly.
+              </p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

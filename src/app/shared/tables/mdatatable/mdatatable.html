@@ -1,0 +1,187 @@
+<div class="space-y-4">
+  <!-- Search and Page Size Controls -->
+  <div
+    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+    *ngIf="config.showSearch || config.showPageSize"
+  >
+    <!-- Search -->
+    <div class="relative" *ngIf="config.showSearch">
+      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <svg class="w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+      <input
+        type="text"
+        [placeholder]="config.searchPlaceholder || 'Search...'"
+        (input)="onSearch($event)"
+        class="pl-10 pr-4 py-2 text-sm bg-neutral-primary border border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand w-full sm:w-64"
+      />
+    </div>
+
+    <!-- Page Size Selector -->
+    <div class="flex items-center gap-3 text-sm" *ngIf="config.showPageSize">
+      <span class="text-gray-500">Show</span>
+      <select
+        (change)="onPageSizeChange($event)"
+        class="px-3 py-2 bg-neutral-primary border border-default rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
+      >
+        <option
+          *ngFor="let size of config.pageSizeOptions"
+          [value]="size"
+          [selected]="size === pageSize"
+        >
+          {{ size }}
+        </option>
+      </select>
+      <span class="text-gray-500">entries</span>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div
+    class="relative overflow-x-auto bg-neutral-primary shadow-xs rounded-lg border border-default"
+  >
+    <table class="w-full text-sm text-left text-body">
+      <thead class="bg-neutral-secondary-soft border-b border-default text-xs uppercase">
+        <tr>
+          <th
+            *ngFor="let column of config.columns"
+            scope="col"
+            class="px-6 py-4 font-medium text-heading"
+          >
+            {{ column.header }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- No Data Row -->
+        <tr *ngIf="paginatedData.length === 0">
+          <td [attr.colspan]="config.columns.length" class="px-6 py-12 text-center text-gray-500">
+            <div class="flex flex-col items-center gap-2">
+              <svg
+                class="w-12 h-12 text-gray-300"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path
+                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                  stroke-width="1.5"
+                />
+              </svg>
+              <span class="text-base font-medium">No data available</span>
+              <span class="text-sm"
+                >Try adjusting your search or filter to find what you're looking for.</span
+              >
+            </div>
+          </td>
+        </tr>
+
+        <!-- Data Rows -->
+        <tr
+          *ngFor="let item of paginatedData; let i = index"
+          class="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default hover:bg-gray-50/50 transition-colors cursor-pointer"
+          (click)="onRowClick(item)"
+        >
+          <td *ngFor="let column of config.columns" class="px-6 py-4">
+            <!-- Status Badge -->
+            <div *ngIf="column.type === 'status'" [innerHTML]="formatValue(item, column)"></div>
+
+            <!-- Action Button -->
+            <div *ngIf="column.type === 'action'">
+              <button
+                *ngIf="column.actionTemplate"
+                (click)="onActionClick(column.field, item, $event)"
+                class="text-fg-brand hover:underline font-medium"
+              >
+                {{ column.actionTemplate(item) }}
+              </button>
+            </div>
+
+            <!-- Regular Text -->
+            <div
+              *ngIf="
+                !column.type ||
+                column.type === 'text' ||
+                column.type === 'number' ||
+                column.type === 'currency'
+              "
+            >
+              <span
+                [class.font-medium]="i === 0 && column.field === 'id'"
+                [class.text-heading]="i === 0 && column.field === 'id'"
+              >
+                {{ formatValue(item, column) }}
+              </span>
+            </div>
+
+            <!-- Date -->
+            <div *ngIf="column.type === 'date'">
+              {{ formatValue(item, column) }}
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div
+    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+    *ngIf="config.showPagination && filteredData.length > 0"
+  >
+    <!-- Info Text -->
+    <div class="text-sm text-gray-500">
+      Showing <span class="font-medium">{{ getStartIndex() }}</span> to
+      <span class="font-medium">{{ getEndIndex() }}</span> of
+      <span class="font-medium">{{ filteredData.length }}</span> entries
+    </div>
+
+    <!-- Pagination Controls -->
+    <ul class="flex -space-x-px text-sm">
+      <!-- Previous Button -->
+      <li>
+        <button
+          (click)="onPageChange(currentPage - 1)"
+          [disabled]="currentPage === 1"
+          class="flex items-center justify-center text-body bg-neutral-primary box-border border border-default hover:bg-neutral-secondary hover:text-heading font-medium rounded-l-lg text-sm px-3 h-9 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          Previous
+        </button>
+      </li>
+
+      <!-- Page Numbers -->
+      <li *ngFor="let page of getPageNumbers()">
+        <button
+          (click)="onPageChange(page)"
+          [attr.aria-current]="page === currentPage ? 'page' : null"
+          class="flex items-center justify-center text-sm w-9 h-9 focus:outline-none transition-colors"
+          [ngClass]="{
+            'text-fg-brand bg-neutral-secondary border border-default font-medium':
+              page === currentPage,
+            'text-body bg-neutral-primary border border-default hover:bg-neutral-secondary hover:text-heading':
+              page !== currentPage,
+          }"
+        >
+          {{ page }}
+        </button>
+      </li>
+
+      <!-- Next Button -->
+      <li>
+        <button
+          (click)="onPageChange(currentPage + 1)"
+          [disabled]="currentPage === totalPages"
+          class="flex items-center justify-center text-body bg-neutral-primary box-border border border-default hover:bg-neutral-secondary hover:text-heading font-medium rounded-r-lg text-sm px-3 h-9 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          Next
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

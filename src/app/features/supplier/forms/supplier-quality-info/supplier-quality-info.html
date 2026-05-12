@@ -1,0 +1,482 @@
+<div class="px-8 py-8">
+  <h2 class="text-lg sm:text-2xl font-bold text-gray-800 mb-1">Quality & Compliance</h2>
+  <p class="text-sm text-gray-500 mb-6">
+    Provide Certifications and compliance related information.
+  </p>
+
+  <form [formGroup]="complianceForm">
+    <!-- Certifications Section -->
+    <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+      <div class="flex justify-between items-center mb-4 sm:mb-6">
+        <h2 class="text-lg sm:text-xl font-semibold text-heading">Certifications</h2>
+        <button
+          type="button"
+          (click)="addCertificate()"
+          class="inline-flex items-center gap-2 text-brand hover:text-brand-dark text-sm font-medium"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            ></path>
+          </svg>
+          Add Certificate
+        </button>
+      </div>
+
+      <div formArrayName="certificates">
+        @for (cert of certificates.controls; track cert; let i = $index) {
+          <div
+            [formGroupName]="i"
+            class="mb-6 p-4 border border-default-medium/50 rounded-lg bg-white/50"
+          >
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-md font-medium text-heading">Certificate {{ i + 1 }}</h3>
+              @if (certificates.length > 1) {
+                <button
+                  type="button"
+                  (click)="removeCertificate(i)"
+                  class="text-red-500 hover:text-red-700"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    ></path>
+                  </svg>
+                </button>
+              }
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6">
+              <!-- Certificate Type -->
+              <div class="space-y-1.5 sm:space-y-2">
+                <label class="block text-sm font-medium text-heading"> Certificate Type* </label>
+                <select
+                  formControlName="type"
+                  class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                >
+                  <option value="">Select certificate type</option>
+                  <option value="ISO9001">ISO 9001 - Quality Management</option>
+                  <option value="ISO14001">ISO 14001 - Environmental Management</option>
+                  <option value="ISO45001">ISO 45001 - Occupational Health & Safety</option>
+                  <option value="ISO27001">ISO 27001 - Information Security</option>
+                  <option value="CE">CE Marking</option>
+                  <option value="UL">UL Certification</option>
+                  <option value="GOTS">GOTS - Global Organic Textile Standard</option>
+                  <option value="HALAL">Halal Certification</option>
+                  <option value="OTHER">Other</option>
+                </select>
+                @if (cert.get('type')?.invalid && cert.get('type')?.touched) {
+                  <div class="text-red-500 text-xs mt-1">Certificate type is required.</div>
+                }
+              </div>
+
+              <!-- Certificate File Upload -->
+              <div class="space-y-1.5 sm:space-y-2">
+                <label class="block text-sm font-medium text-heading"> Certificate File* </label>
+                <div class="flex items-center justify-center w-full">
+                  <label
+                    [for]="'certificate_file_' + i"
+                    class="flex flex-col items-center justify-center w-full h-24 bg-white border border-dashed border-default-strong rounded-base cursor-pointer hover:bg-neutral-tertiary-medium transition-colors"
+                    [class.opacity-50]="getIsUploading(i)"
+                  >
+                    <div class="flex flex-col items-center justify-center text-body">
+                      @if (getIsUploading(i)) {
+                        <div class="text-center">
+                          <svg
+                            class="animate-spin h-6 w-6 text-brand mx-auto"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              class="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              stroke-width="4"
+                            ></circle>
+                            <path
+                              class="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          <p class="mt-1 text-xs font-semibold">
+                            Uploading... {{ getUploadProgress(i) }}%
+                          </p>
+                        </div>
+                      } @else {
+                        <div>
+                          <svg
+                            class="w-6 h-6 mb-1"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2"
+                            />
+                          </svg>
+                          <p class="text-xs">
+                            <span class="font-semibold">Click to upload</span>
+                          </p>
+                          <p class="text-xs">PDF, JPG, PNG (MAX. 5MB)</p>
+                        </div>
+                      }
+                    </div>
+                    <input
+                      [id]="'certificate_file_' + i"
+                      type="file"
+                      class="hidden"
+                      (change)="onCertificateSelected($event, i)"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      [disabled]="getIsUploading(i)"
+                    />
+                  </label>
+                </div>
+                @if (getCertificateError(i)) {
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ getCertificateError(i) }}
+                  </div>
+                }
+                @if (getCertificateFileName(i) && !getIsUploading(i)) {
+                  <div class="text-green-600 text-xs mt-1 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    Uploaded: {{ getCertificateFileName(i) }}
+                  </div>
+                }
+                @if (getExistingFileUrl(i)) {
+                  <div class="text-blue-600 text-xs mt-1">
+                    Existing file: {{ getExistingFileUrl(i) }}
+                  </div>
+                }
+                @if (getIsUploading(i) && getUploadProgress(i) > 0 && getUploadProgress(i) < 100) {
+                  <div class="w-full bg-gray-200 rounded-full h-1 mt-2">
+                    <div
+                      class="bg-brand h-1 rounded-full transition-all duration-300"
+                      [style.width]="getUploadProgress(i) + '%'"
+                    ></div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+    </div>
+
+    <!-- Compliance Questions Section -->
+    <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8 mt-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">
+        Compliance Questions
+      </h2>
+
+      <div class="flex flex-col gap-4">
+        <!-- Question 1: Labor Laws -->
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+          <p class="text-sm text-gray-600 max-w-3xl">Comply with local labor laws?</p>
+          <div class="flex gap-8 shrink-0">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="compliesWithLaborLaws"
+                [value]="true"
+                class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+              />
+              <span class="text-sm text-gray-700">Yes</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="compliesWithLaborLaws"
+                [value]="false"
+                class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+              />
+              <span class="text-sm text-gray-700">No</span>
+            </label>
+          </div>
+        </div>
+        @if (
+          complianceForm.get('compliesWithLaborLaws')?.invalid &&
+          complianceForm.get('compliesWithLaborLaws')?.touched
+        ) {
+          <div class="text-red-500 text-xs mt-1">This field is required.</div>
+        }
+
+        <!-- Question 2: HSE Policy -->
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+          <p class="text-sm text-gray-600 max-w-3xl">HSE policy available?</p>
+          <div class="flex gap-8 shrink-0">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="hasHSEPolicy"
+                [value]="true"
+                class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+              />
+              <span class="text-sm text-gray-700">Yes</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="hasHSEPolicy"
+                [value]="false"
+                class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+              />
+              <span class="text-sm text-gray-700">No</span>
+            </label>
+          </div>
+        </div>
+        @if (
+          complianceForm.get('hasHSEPolicy')?.invalid && complianceForm.get('hasHSEPolicy')?.touched
+        ) {
+          <div class="text-red-500 text-xs mt-1">This field is required.</div>
+        }
+
+        <!-- Question 3: Anti-Bribery Policy -->
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+          <p class="text-sm text-gray-600 max-w-3xl">Has Anti-Bribery Policy?</p>
+          <div class="flex gap-8 shrink-0">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="hasAntiBriberyPolicy"
+                [value]="true"
+                class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+              />
+              <span class="text-sm text-gray-700">Yes</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="hasAntiBriberyPolicy"
+                [value]="false"
+                class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+              />
+              <span class="text-sm text-gray-700">No</span>
+            </label>
+          </div>
+        </div>
+        @if (
+          complianceForm.get('hasAntiBriberyPolicy')?.invalid &&
+          complianceForm.get('hasAntiBriberyPolicy')?.touched
+        ) {
+          <div class="text-red-500 text-xs mt-1">This field is required.</div>
+        }
+
+        <!-- Question 4: Legal Issues -->
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+          <p class="text-sm text-gray-600 max-w-3xl">
+            Any legal/compliance issues in last 3 years?
+          </p>
+          <div class="flex gap-8 shrink-0">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="hasLegalIssues"
+                [value]="true"
+                class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+              />
+              <span class="text-sm text-gray-700">Yes</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="hasLegalIssues"
+                [value]="false"
+                class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+              />
+              <span class="text-sm text-gray-700">No</span>
+            </label>
+          </div>
+        </div>
+        @if (
+          complianceForm.get('hasLegalIssues')?.invalid &&
+          complianceForm.get('hasLegalIssues')?.touched
+        ) {
+          <div class="text-red-500 text-xs mt-1">This field is required.</div>
+        }
+
+        <!-- Legal Issues Explanation -->
+        <div class="space-y-1.5 sm:space-y-2 mt-6">
+          <label for="legal_issues_explanation" class="block text-sm font-medium text-heading">
+            Explanation (If Yes to Legal Issues)
+          </label>
+          <textarea
+            id="legal_issues_explanation"
+            rows="3"
+            formControlName="legalIssuesExplanation"
+            class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body"
+            placeholder="Provide explanation if there are any legal issues"
+          ></textarea>
+          @if (
+            complianceForm.get('hasLegalIssues')?.value === true &&
+            complianceForm.get('legalIssuesExplanation')?.invalid &&
+            complianceForm.get('legalIssuesExplanation')?.touched
+          ) {
+            <div class="text-red-500 text-xs mt-1">
+              Explanation is required when legal issues are present.
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+    </div>
+
+    <!-- Sustainability Practices Section -->
+    <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8 mt-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">
+        Sustainability Practices
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            (change)="onSustainabilityChange($event, 'Waste Management')"
+            [checked]="isSustainabilitySelected('Waste Management')"
+            class="w-4 h-4 text-brand border-default-medium rounded focus:ring-brand focus:ring-offset-0 focus:outline-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Waste Management</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            (change)="onSustainabilityChange($event, 'Energy Efficiency')"
+            [checked]="isSustainabilitySelected('Energy Efficiency')"
+            class="w-4 h-4 text-brand border-default-medium rounded focus:ring-brand focus:ring-offset-0 focus:outline-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Energy Efficiency</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            (change)="onSustainabilityChange($event, 'Water Conservation')"
+            [checked]="isSustainabilitySelected('Water Conservation')"
+            class="w-4 h-4 text-brand border-default-medium rounded focus:ring-brand focus:ring-offset-0 focus:outline-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Water Conservation</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            (change)="onSustainabilityChange($event, 'Carbon Footprint Reduction')"
+            [checked]="isSustainabilitySelected('Carbon Footprint Reduction')"
+            class="w-4 h-4 text-brand border-default-medium rounded focus:ring-brand focus:ring-offset-0 focus:outline-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Carbon Footprint Reduction</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            (change)="onSustainabilityChange($event, 'Renewable Energy')"
+            [checked]="isSustainabilitySelected('Renewable Energy')"
+            class="w-4 h-4 text-brand border-default-medium rounded focus:ring-brand focus:ring-offset-0 focus:outline-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Renewable Energy</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            (change)="onSustainabilityChange($event, 'Sustainable Sourcing')"
+            [checked]="isSustainabilitySelected('Sustainable Sourcing')"
+            class="w-4 h-4 text-brand border-default-medium rounded focus:ring-brand focus:ring-offset-0 focus:outline-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Sustainable Sourcing</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            (change)="onSustainabilityChange($event, 'Community Engagement')"
+            [checked]="isSustainabilitySelected('Community Engagement')"
+            class="w-4 h-4 text-brand border-default-medium rounded focus:ring-brand focus:ring-offset-0 focus:outline-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Community Engagement</span>
+        </label>
+
+        <label
+          class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+        >
+          <input
+            type="checkbox"
+            (change)="onSustainabilityChange($event, 'Employee Wellbeing')"
+            [checked]="isSustainabilitySelected('Employee Wellbeing')"
+            class="w-4 h-4 text-brand border-default-medium rounded focus:ring-brand focus:ring-offset-0 focus:outline-none"
+          />
+          <span class="text-sm text-gray-700 leading-tight">Employee Wellbeing</span>
+        </label>
+      </div>
+
+      <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+    </div>
+  </form>
+
+  <div class="flex justify-end py-4 gap-2">
+    <button
+      type="button"
+      (click)="onBack()"
+      class="text-body bg-neutral-primary border border-default hover:bg-neutral-secondary-soft hover:text-heading focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none"
+    >
+      Back
+    </button>
+
+    <button
+      type="button"
+      (click)="onSave()"
+      class="text-body bg-neutral-primary border border-default hover:bg-neutral-secondary-soft hover:text-heading focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none"
+    >
+      Save
+    </button>
+
+    <button
+      type="button"
+      (click)="onSubmit()"
+      class="text-white bg-linear-to-r from-brand-500 via-brand to-gray-600 hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-brand-300 dark:focus:ring-brand-800 font-medium rounded-base text-sm px-6 py-2.5 text-center leading-5"
+    >
+      Submit
+    </button>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="bg-repeat-x" style="background-image: url('/images/bg-circuit.png')">
+  <!-- HEADER - Outside the white box, above it -->
+  <div class="relative flex items-center justify-between pt-10 max-w-5xl mx-auto">
+    <!-- Logo -->
+    <img src="logo/arbha-logo.png" alt="Bin Quraya" class="md:w-24 w-32" />
+
+    <!-- Mobile Title (visible only on small screens) -->
+    <div class="flex-1 text-center md:hidden">
+      <h1 class="text-xl font-semibold text-gray-900 truncate px-2">Supplier Registration</h1>
+      <p class="text-sm text-gray-500 truncate">Register as a vendor</p>
+    </div>
+
+    <!-- Desktop Centered Title (hidden on mobile) -->
+    <div
+      class="hidden md:block absolute left-1/2 transform -translate-x-1/2 text-center max-w-md lg:max-w-lg"
+    >
+      <h1 class="text-xl lg:text-3xl font-bold text-gray-900 truncate mt-4">
+        Supplier Registration Request
+      </h1>
+      <p class="text-sm lg:text-base text-gray-500 truncate my-2 mb-4">
+        Register as a vendor to offer and manage your services.
+      </p>
+    </div>
+
+    <!-- Empty div for flex spacing on desktop -->
+    <div class="w-20 md:w-24 lg:w-32"></div>
+  </div>
+
+  @if (loaded$ | async) {
+    @if (currentStep$ | async; as currentStep) {
+      <app-stepper [selectedIndex]="currentStep - 1">
+        @for (step of steps; track $index) {
+          <cdk-step [label]="step.label" [editable]="isEditable(step.stepNumber, currentStep)">
+            <ng-container *ngComponentOutlet="step.component"></ng-container>
+          </cdk-step>
+        }
+      </app-stepper>
+    }
+  }
+</div>

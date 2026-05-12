@@ -1,0 +1,782 @@
+<header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative flex items-center justify-between h-24 md:h-28">
+      <!-- Logo -->
+      <img src="logo/arbha-logo.png" alt="Bin Quraya" class="md:w-20 w-32" />
+
+      <!-- Mobile Title (visible only on small screens) -->
+      <div class="flex-1 text-center md:hidden">
+        <h1 class="text-xl font-semibold text-gray-900 truncate px-2">Supplier Registration</h1>
+        <p class="text-sm text-gray-500 truncate">Register as a vendor</p>
+      </div>
+
+      <!-- Desktop Centered Title (hidden on mobile) -->
+      <div
+        class="hidden md:block absolute left-1/2 transform -translate-x-1/2 text-center max-w-md lg:max-w-lg"
+      >
+        <h1 class="text-xl lg:text-3xl font-bold text-gray-900 truncate mt-4">
+          Supplier Registration Request
+        </h1>
+        <p class="text-sm lg:text-base text-gray-500 truncate my-2 mb-4">
+          Register as a vendor to offer and manage your services.
+        </p>
+      </div>
+
+      <!-- Empty div for flex spacing on desktop -->
+      <div class="w-20 md:w-24 lg:w-32"></div>
+    </div>
+  </div>
+</header>
+
+<section
+  class="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 bg-repeat-y bg-right"
+  style="background-image: url('/images/bg-circuit-yr.png')"
+>
+  <form [formGroup]="vendorForm" (ngSubmit)="submitForm()">
+    <div class="flex flex-col gap-10 max-w-5xl mx-auto">
+      <!-- Company Details Section -->
+      <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+        <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">Company Details</h2>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6"
+          formGroupName="companyInformation"
+        >
+          <!-- Company Legal Name -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="company_legal_name" class="block text-sm font-medium text-heading">
+              Company Full Name*
+            </label>
+            <input
+              type="text"
+              id="company_legal_name"
+              formControlName="companyFullName"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+              placeholder="Enter company legal name"
+              required
+            />
+            @if (
+              vendorForm.get('companyInformation.companyFullName')?.invalid &&
+              (vendorForm.get('companyInformation.companyFullName')?.touched ||
+                vendorForm.get('companyInformation.companyFullName')?.dirty)
+            ) {
+              <div class="text-red-500 text-xs mt-1">Company name is required</div>
+            }
+          </div>
+
+          <!-- Country of Registration -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="country_registration" class="block text-sm font-medium text-heading">
+              Country of Registration*
+            </label>
+            <select
+              id="country_registration"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+              formControlName="countryOfRegistration"
+            >
+              <option value="">Select country</option>
+              <option value="Saudi Arabia">Saudi Arabia</option>
+              <option value="UAE">UAE</option>
+              <option value="Qatar">Qatar</option>
+              <option value="Kuwait">Kuwait</option>
+              <option value="Bahrain">Bahrain</option>
+              <option value="Oman">Oman</option>
+            </select>
+            @if (
+              vendorForm.get('companyInformation.countryOfRegistration')?.invalid &&
+              (vendorForm.get('companyInformation.countryOfRegistration')?.touched ||
+                vendorForm.get('companyInformation.countryOfRegistration')?.dirty)
+            ) {
+              <div class="text-red-500 text-xs mt-1">Country of registration is required</div>
+            }
+          </div>
+
+          <!-- Registration Number -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="registration_number" class="block text-sm font-medium text-heading">
+              Registration Number*
+            </label>
+            <input
+              type="text"
+              id="registration_number"
+              formControlName="registrationNumber"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+              placeholder="Enter registration number"
+              required
+            />
+            @if (
+              vendorForm.get('companyInformation.registrationNumber')?.invalid &&
+              (vendorForm.get('companyInformation.registrationNumber')?.touched ||
+                vendorForm.get('companyInformation.registrationNumber')?.dirty)
+            ) {
+              <div class="text-red-500 text-xs mt-1">Registration number is required</div>
+            }
+          </div>
+
+          <!-- HQ Office Location -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="hq_location" class="block text-sm font-medium text-heading">
+              HQ Office Location*
+            </label>
+            <input
+              type="text"
+              id="hq_location"
+              formControlName="hqOfficeLocation"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+              placeholder="Enter headquarters location"
+              required
+            />
+            @if (
+              vendorForm.get('companyInformation.hqOfficeLocation')?.invalid &&
+              (vendorForm.get('companyInformation.hqOfficeLocation')?.touched ||
+                vendorForm.get('companyInformation.hqOfficeLocation')?.dirty)
+            ) {
+              <div class="text-red-500 text-xs mt-1">HQ office location is required</div>
+            }
+          </div>
+
+          <!-- Business Address -->
+          <div class="space-y-1.5 sm:space-y-2 sm:col-span-2">
+            <label for="business_address" class="block text-sm font-medium text-heading">
+              Business Address*
+            </label>
+            <textarea
+              id="business_address"
+              rows="3"
+              formControlName="businessAddress"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body"
+              placeholder="Enter full business address"
+              required
+            ></textarea>
+            @if (
+              vendorForm.get('companyInformation.businessAddress')?.invalid &&
+              (vendorForm.get('companyInformation.businessAddress')?.touched ||
+                vendorForm.get('companyInformation.businessAddress')?.dirty)
+            ) {
+              <div class="text-red-500 text-xs mt-1">Business address is required</div>
+            }
+          </div>
+
+          <!-- Last Year Turnover* -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="last_year_turnover" class="block text-sm font-medium text-heading">
+              Last Year Turnover*
+            </label>
+            <input
+              type="number"
+              id="last_year_turnover"
+              formControlName="turnoverLastYear"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+              placeholder="Enter last year turnover"
+              required
+            />
+            @if (
+              vendorForm.get('companyInformation.turnoverLastYear')?.invalid &&
+              (vendorForm.get('companyInformation.turnoverLastYear')?.touched ||
+                vendorForm.get('companyInformation.turnoverLastYear')?.dirty)
+            ) {
+              @if (vendorForm.get('companyInformation.turnoverLastYear')?.errors?.['required']) {
+                <div class="text-red-500 text-xs mt-1">Turnover is required</div>
+              }
+              @if (vendorForm.get('companyInformation.turnoverLastYear')?.errors?.['min']) {
+                <div class="text-red-500 text-xs mt-1">Turnover must be at least 1</div>
+              }
+            }
+          </div>
+
+          <!-- Website URL -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="website_url" class="block text-sm font-medium text-heading">
+              Website URL*
+            </label>
+            <input
+              type="url"
+              id="website_url"
+              formControlName="websiteUrl"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+              placeholder="https://www.example.com"
+              required
+            />
+            @if (
+              vendorForm.get('companyInformation.websiteUrl')?.invalid &&
+              (vendorForm.get('companyInformation.websiteUrl')?.touched ||
+                vendorForm.get('companyInformation.websiteUrl')?.dirty)
+            ) {
+              @if (vendorForm.get('companyInformation.websiteUrl')?.errors?.['required']) {
+                <div class="text-red-500 text-xs mt-1">Website URL is required</div>
+              }
+              @if (vendorForm.get('companyInformation.websiteUrl')?.errors?.['pattern']) {
+                <div class="text-red-500 text-xs mt-1">
+                  Please enter a valid URL starting with http:// or https://
+                </div>
+              }
+            }
+          </div>
+        </div>
+
+        <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+      </div>
+
+      <!-- Point of Contact Section -->
+      <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+        <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">Point of Contact</h2>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6"
+          formGroupName="pointOfContact"
+        >
+          <!-- Key contact Person -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="contact_person" class="block text-sm font-medium text-heading">
+              Key Contact Person*
+            </label>
+            <input
+              type="text"
+              id="contact_person"
+              formControlName="keyContactPerson"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+              placeholder="Enter full name"
+              required
+            />
+            @if (
+              vendorForm.get('pointOfContact.keyContactPerson')?.invalid &&
+              (vendorForm.get('pointOfContact.keyContactPerson')?.touched ||
+                vendorForm.get('pointOfContact.keyContactPerson')?.dirty)
+            ) {
+              <div class="text-red-500 text-xs mt-1">Key contact person is required</div>
+            }
+          </div>
+
+          <!-- Position -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="contact_position" class="block text-sm font-medium text-heading">
+              Position*
+            </label>
+            <input
+              type="text"
+              id="contact_position"
+              formControlName="position"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+              placeholder="Enter job title"
+              required
+            />
+            @if (
+              vendorForm.get('pointOfContact.position')?.invalid &&
+              (vendorForm.get('pointOfContact.position')?.touched ||
+                vendorForm.get('pointOfContact.position')?.dirty)
+            ) {
+              <div class="text-red-500 text-xs mt-1">Position is required</div>
+            }
+          </div>
+
+          <!-- Email -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="contact_email" class="block text-sm font-medium text-heading">
+              Email*
+            </label>
+            <input
+              type="email"
+              id="contact_email"
+              formControlName="email"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+              placeholder="email@example.com"
+              required
+            />
+            @if (
+              vendorForm.get('pointOfContact.email')?.invalid &&
+              (vendorForm.get('pointOfContact.email')?.touched ||
+                vendorForm.get('pointOfContact.email')?.dirty)
+            ) {
+              @if (vendorForm.get('pointOfContact.email')?.errors?.['required']) {
+                <div class="text-red-500 text-xs mt-1">Email is required</div>
+              }
+              @if (vendorForm.get('pointOfContact.email')?.errors?.['email']) {
+                <div class="text-red-500 text-xs mt-1">Please enter a valid email address</div>
+              }
+            }
+          </div>
+
+          <!-- Phone Number -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="contact_phone" class="block text-sm font-medium text-heading">
+              Phone Number*
+            </label>
+            <input
+              type="tel"
+              id="contact_phone"
+              formControlName="phoneNumber"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+              placeholder="+966 50 000 0000"
+              required
+            />
+            @if (
+              vendorForm.get('pointOfContact.phoneNumber')?.invalid &&
+              (vendorForm.get('pointOfContact.phoneNumber')?.touched ||
+                vendorForm.get('pointOfContact.phoneNumber')?.dirty)
+            ) {
+              <div class="text-red-500 text-xs mt-1">Phone number is required</div>
+            }
+          </div>
+
+          <!-- Mobile Number -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <label for="contact_mobile" class="block text-sm font-medium text-heading">
+              Mobile Number*
+            </label>
+            <input
+              type="tel"
+              id="contact_mobile"
+              formControlName="mobileNumber"
+              class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+              placeholder="+966 50 000 0000"
+              required
+            />
+            @if (
+              vendorForm.get('pointOfContact.mobileNumber')?.invalid &&
+              (vendorForm.get('pointOfContact.mobileNumber')?.touched ||
+                vendorForm.get('pointOfContact.mobileNumber')?.dirty)
+            ) {
+              <div class="text-red-500 text-xs mt-1">Mobile number is required</div>
+            }
+          </div>
+        </div>
+
+        <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+      </div>
+
+      <!-- Entity Type Section -->
+      <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+        <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">Entity Type</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          <!-- Government -->
+          <label
+            class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+          >
+            <input
+              type="radio"
+              formControlName="entityType"
+              [value]="EntityType.GOVERNMENT"
+              class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+            />
+            <span class="text-sm text-gray-700 leading-tight">Government</span>
+          </label>
+
+          <!-- Private -->
+          <label
+            class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+          >
+            <input
+              type="radio"
+              formControlName="entityType"
+              [value]="EntityType.PRIVATE"
+              class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+            />
+            <span class="text-sm text-gray-700 leading-tight">Private</span>
+          </label>
+
+          <!-- Public -->
+          <label
+            class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+          >
+            <input
+              type="radio"
+              formControlName="entityType"
+              [value]="EntityType.PUBLIC"
+              class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+            />
+            <span class="text-sm text-gray-700 leading-tight">Public</span>
+          </label>
+
+          <!-- PIF Related Party -->
+          <label
+            class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+          >
+            <input
+              type="radio"
+              formControlName="entityType"
+              [value]="EntityType.PIFRELATED"
+              class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+            />
+            <span class="text-sm text-gray-700 leading-tight">PIF Related Party</span>
+          </label>
+
+          <!-- Individual -->
+          <label
+            class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+          >
+            <input
+              type="radio"
+              formControlName="entityType"
+              [value]="EntityType.INDIVIDUAL"
+              class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+            />
+            <span class="text-sm text-gray-700 leading-tight">Individual</span>
+          </label>
+        </div>
+        @if (
+          vendorForm.get('entityType')?.invalid &&
+          (vendorForm.get('entityType')?.touched || vendorForm.get('entityType')?.dirty)
+        ) {
+          <div class="text-red-500 text-xs mt-2">Please select an entity type</div>
+        }
+
+        <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+      </div>
+
+      <!-- Vendor Business Type Section -->
+      <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+        <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">
+          Vendor Business Type
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          <!-- Contractor -->
+          <label
+            class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+          >
+            <input
+              type="radio"
+              formControlName="businessType"
+              [value]="BusinessType.CONTRACTOR"
+              class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+            />
+            <span class="text-sm text-gray-700 leading-tight">Contractor</span>
+          </label>
+
+          <!-- Consultant -->
+          <label
+            class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+          >
+            <input
+              type="radio"
+              formControlName="businessType"
+              [value]="BusinessType.CONSULTANT"
+              class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+            />
+            <span class="text-sm text-gray-700 leading-tight">Consultant</span>
+          </label>
+
+          <!-- Supplier -->
+          <label
+            class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+          >
+            <input
+              type="radio"
+              formControlName="businessType"
+              [value]="BusinessType.SUPPLIER"
+              class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+            />
+            <span class="text-sm text-gray-700 leading-tight">Supplier</span>
+          </label>
+
+          <!-- FFF & OSE -->
+          <label
+            class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+          >
+            <input
+              type="radio"
+              formControlName="businessType"
+              [value]="BusinessType.FFF_OSE"
+              class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+            />
+            <span class="text-sm text-gray-700 leading-tight">FFF & OSE</span>
+          </label>
+
+          <!-- Freelancer -->
+          <label
+            class="flex items-center gap-3 cursor-pointer p-2 -ml-2 hover:bg-neutral-200/50 rounded-lg transition-colors"
+          >
+            <input
+              type="radio"
+              formControlName="businessType"
+              [value]="BusinessType.SOLE_TRADER"
+              class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+            />
+            <span class="text-sm text-gray-700 leading-tight">Freelancer</span>
+          </label>
+        </div>
+        @if (
+          vendorForm.get('businessType')?.invalid &&
+          (vendorForm.get('businessType')?.touched || vendorForm.get('businessType')?.dirty)
+        ) {
+          <div class="text-red-500 text-xs mt-2">Please select a business type</div>
+        }
+
+        <!-- Scope of Service -->
+        <div class="space-y-1.5 sm:space-y-2 mt-8 sm:mt-10">
+          <label for="scope_of_service" class="block text-sm font-medium text-heading">
+            Scope of Service*
+          </label>
+          <select
+            id="scope_of_service"
+            formControlName="scopeOfServices"
+            multiple
+            class="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm bg-white border border-default-medium rounded-lg text-heading shadow-xs focus:ring-brand focus:border-brand transition-colors"
+          >
+            @for (option of scopeOptions; track $index) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          @if (
+            vendorForm.get('scopeOfServices')?.invalid &&
+            (vendorForm.get('scopeOfServices')?.touched || vendorForm.get('scopeOfServices')?.dirty)
+          ) {
+            <div class="text-red-500 text-xs mt-1">Scope of service is required</div>
+          }
+        </div>
+
+        <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+      </div>
+
+      <!-- Local Content Section -->
+      <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+        <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">Local Content</h2>
+
+        <div formGroupName="localContent">
+          <!-- Question 1 -->
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-6">
+            <p class="text-sm text-gray-600 max-w-3xl">
+              Do you have Regional Headquarters Registered in KSA? The Regional Headquarters (RHQ)
+              certificate number is not the commercial registration certificate number. The RHQ
+              certificate number is only issued exclusively by the Ministry of Investment of Saudi
+              Arabia (MISA).
+            </p>
+
+            <div class="flex gap-8 shrink-0">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  formControlName="hasRegionalHQ"
+                  [value]="true"
+                  class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+                />
+                <span class="text-sm text-gray-700">Yes</span>
+              </label>
+
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  formControlName="hasRegionalHQ"
+                  [value]="false"
+                  class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+                />
+                <span class="text-sm text-gray-700">No</span>
+              </label>
+            </div>
+          </div>
+
+          @if (vendorForm.get('localContent.hasRegionalHQ')?.value) {
+            <!-- Regional HQ Certificate -->
+            <div class="space-y-1.5 sm:space-y-2 mb-8">
+              <label for="contact_position" class="block text-sm font-medium text-heading">
+                Regional HQ Certificate*
+              </label>
+              <input
+                type="text"
+                id="contact_position"
+                formControlName="regionalHQCertificate"
+                class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                placeholder="Enter Regional HQ Certificate"
+                required
+              />
+              @if (
+                vendorForm.get('localContent.regionalHQCertificate')?.invalid &&
+                (vendorForm.get('localContent.regionalHQCertificate')?.touched ||
+                  vendorForm.get('localContent.regionalHQCertificate')?.dirty)
+              ) {
+                <div class="text-red-500 text-xs mt-1">Regional HQ Certificate is required</div>
+              }
+            </div>
+          }
+
+          <!-- Question 2 -->
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <p class="text-sm text-gray-600 max-w-3xl">
+              Do you have Local Content Certificate from LCGPA?
+            </p>
+
+            <div class="flex gap-8 shrink-0">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  formControlName="hasLocalContentCert"
+                  [value]="true"
+                  class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+                />
+                <span class="text-sm text-gray-700">Yes</span>
+              </label>
+
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  formControlName="hasLocalContentCert"
+                  [value]="false"
+                  class="w-4 h-4 text-neutral-primary border-default-medium bg-white rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none"
+                />
+                <span class="text-sm text-gray-700">No</span>
+              </label>
+            </div>
+          </div>
+
+          @if (vendorForm.get('localContent.hasLocalContentCert')?.value) {
+            <!-- Local Content Certificate -->
+            <div class="space-y-1.5 sm:space-y-2 mt-6">
+              <label for="contact_position" class="block text-sm font-medium text-heading">
+                Local Content Certificate*
+              </label>
+              <input
+                type="text"
+                id="contact_position"
+                formControlName="localContentCert"
+                class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                placeholder="Enter Local Content Certificate"
+                required
+              />
+              @if (
+                vendorForm.get('localContent.localContentCert')?.invalid &&
+                (vendorForm.get('localContent.localContentCert')?.touched ||
+                  vendorForm.get('localContent.localContentCert')?.dirty)
+              ) {
+                <div class="text-red-500 text-xs mt-1">Local Content Certificate is required</div>
+              }
+            </div>
+          }
+
+          @if (
+            (vendorForm.get('localContent.hasRegionalHQ')?.invalid ||
+              vendorForm.get('localContent.hasLocalContentCert')?.invalid) &&
+            (vendorForm.get('localContent.hasRegionalHQ')?.touched ||
+              vendorForm.get('localContent.hasLocalContentCert')?.touched)
+          ) {
+            <div class="text-red-500 text-xs mt-4">Please answer both questions</div>
+          }
+        </div>
+
+        <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+      </div>
+
+      <!-- Documents and Attachments Section -->
+      <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+        <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">
+          Documents and Attachments
+        </h2>
+
+        <p class="text-sm text-gray-500 mb-6">
+          The upload of the below documents are optional and not mandatory for submission. File
+          format: .jpeg, .jpg, .pdf, .png no larger than 5 MB.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Company Profile -->
+          <div>
+            <label class="block mb-2.5 text-sm font-medium text-heading" for="company_profile"
+              >Company Profile (Optional)</label
+            >
+            <div class="relative inline-block w-full">
+              <input
+                class="cursor-pointer bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full shadow-xs placeholder:text-body"
+                id="company_profile"
+                type="file"
+                formControlName="companyProfileUploadId"
+                (change)="onFileChange($event, 'companyProfileUploadId')"
+              />
+
+              @if (uploads()['companyProfileUploadId']?.status === 'uploading') {
+                <div
+                  class="absolute inset-0 bg-brand/20 flex items-center justify-start rounded-base z-10"
+                >
+                  <div
+                    class="flex flex-col items-center gap-2 bg-brand/65 px-4 py-2 rounded-xl h-full"
+                    [style.width.%]="uploads()['companyProfileUploadId']?.progress"
+                  >
+                    <!-- Progress Percentage Text -->
+                    <span class="text-sm font-medium text-white text-center">
+                      {{ uploads()['companyProfileUploadId']?.progress }}%
+                    </span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Other Document -->
+          <div>
+            <label class="block mb-2.5 text-sm font-medium text-heading" for="other_document">
+              Other Document, maximum 1 (Optional)
+            </label>
+            <div class="relative inline-block w-full">
+              <input
+                class="cursor-pointer bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full shadow-xs placeholder:text-body"
+                id="other_document"
+                type="file"
+                formControlName="otherDocumentUploadId"
+                (change)="onFileChange($event, 'otherDocumentUploadId')"
+              />
+
+              @if (uploads()['otherDocumentUploadId']?.status === 'uploading') {
+                <div
+                  class="absolute inset-0 bg-brand/20 flex items-center justify-start rounded-base z-10"
+                >
+                  <div
+                    class="flex flex-col items-center gap-2 bg-brand/65 px-4 py-2 rounded-xl h-full"
+                    [style.width.%]="uploads()['otherDocumentUploadId']?.progress"
+                  >
+                    <!-- Progress Percentage Text -->
+                    <span class="text-sm font-medium text-white text-center">
+                      {{ uploads()['otherDocumentUploadId']?.progress }}%
+                    </span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+      </div>
+
+      <!-- Statement of Declaration Section -->
+      <div class="bg-neutral-100/75 rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-6 lg:p-8">
+        <h2 class="text-lg sm:text-xl font-semibold text-heading mb-4 sm:mb-6">
+          Statement of Declaration
+        </h2>
+
+        <div>
+          <label
+            for="declaration_checkbox"
+            class="flex items-start gap-3 text-sm text-gray-600 cursor-pointer"
+          >
+            <input
+              id="declaration_checkbox"
+              type="checkbox"
+              formControlName="declarationAccepted"
+              class="w-4 h-4 mt-0.5 border border-default-medium rounded-xs bg-white focus:ring-2 focus:ring-brand-soft"
+            />
+            <span>
+              I hereby certify that, as of the above date, the information provided in this
+              company's registration statement is true and sufficiently complete so as not to be
+              misleading.
+            </span>
+          </label>
+          @if (
+            vendorForm.get('declarationAccepted')?.invalid &&
+            (vendorForm.get('declarationAccepted')?.touched ||
+              vendorForm.get('declarationAccepted')?.dirty)
+          ) {
+            <div class="text-red-500 text-xs mt-2">You must accept the declaration</div>
+          }
+        </div>
+
+        <!-- Submit button -->
+        <div class="flex justify-end pt-6">
+          <button appVendButton type="submit" class="px-6" [disabled]="vendorForm.invalid">
+            Submit
+          </button>
+        </div>
+
+        <div class="mt-6 sm:mt-8 pt-4 border-t border-default-medium/50"></div>
+      </div>
+    </div>
+  </form>
+</section>

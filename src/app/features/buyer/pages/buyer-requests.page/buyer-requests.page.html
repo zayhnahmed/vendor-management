@@ -1,0 +1,497 @@
+<!-- application-requests.component.html -->
+<div class="max-w-6xl mx-auto sm:space-y-8 bg-gray-50 min-h-screen font-sans">
+  <!-- Header Section -->
+  <div class="px-6 pt-2">
+    <div class="flex items-center justify-between mb-2">
+      <div>
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">Application Requests</h1>
+        <p class="mt-1 text-sm text-gray-500">Manage and track vendor applications</p>
+      </div>
+      <button
+        (click)="createNewApplication()"
+        class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white transition-all bg-linear-to-r from-brand to-brand-500 rounded-xl shadow-sm hover:shadow-md hover:from-brand-500 hover:to-brand-300 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+        <span>New Application</span>
+      </button>
+    </div>
+
+    <!-- Breadcrumb -->
+    <!-- <nav class="flex items-center gap-2 text-sm mt-4">
+      <a href="#" class="text-gray-500 transition-colors hover:text-gray-700">Home</a>
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+      <span class="font-medium text-gray-900">Application Requests</span>
+    </nav> -->
+  </div>
+
+  <!-- Stats Cards - New Design Pattern -->
+  <div class="px-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- New Requests Card -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow"
+      >
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 flex items-center justify-center rounded-xl bg-brand/10 text-brand text-xl font-bold shrink-0"
+          >
+            {{ stats.new }}
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">New Requests</p>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-sm text-gray-500">{{ stats.new }} New</span>
+              <span class="text-xs text-brand bg-brand/10 px-2 py-0.5 rounded-full"
+                >Pending Review</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Progress Card -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow"
+      >
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 flex items-center justify-center rounded-xl bg-yellow-50 text-yellow-600 text-xl font-bold shrink-0"
+          >
+            {{ stats.pending }}
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">In Progress</p>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-sm text-gray-500">{{ stats.pending }} Active</span>
+              <span class="text-xs text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded-full"
+                >Under Review</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Approved Card -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow"
+      >
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 flex items-center justify-center rounded-xl bg-green-50 text-green-600 text-xl font-bold shrink-0"
+          >
+            {{ stats.approved }}
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">Approved</p>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-sm text-gray-500">{{ stats.approved }} Vendors</span>
+              <span class="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full"
+                >Active</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rejected Card -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow"
+      >
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 flex items-center justify-center rounded-xl bg-red-50 text-red-600 text-xl font-bold shrink-0"
+          >
+            {{ stats.rejected }}
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">Rejected</p>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-sm text-gray-500">{{ stats.rejected }} Applications</span>
+              <span class="text-xs text-red-600 bg-red-50 px-2 py-0.5 rounded-full"
+                >Needs Review</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="px-6 pb-8">
+    <div class="flex flex-col gap-6 lg:flex-row">
+      <!-- Table Section -->
+      <div class="flex-1 overflow-hidden bg-white rounded-2xl shadow-sm border border-gray-200">
+        <!-- Toolbar -->
+        <div class="p-4 border-b border-gray-200">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <!-- Search -->
+            <div class="relative flex-1 max-w-md">
+              <svg
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="text"
+                [value]="searchTerm"
+                (input)="onSearchChange($event)"
+                placeholder="Search by ID, vendor, or category..."
+                class="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all"
+              />
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="flex flex-wrap gap-2">
+              <button
+                *ngFor="let filter of filters"
+                (click)="onFilterClick(filter.value)"
+                [class]="getFilterButtonClass(filter.value)"
+              >
+                {{ filter.label }}
+              </button>
+              <button
+                (click)="resetFilters()"
+                class="px-3 py-1.5 text-sm font-medium text-gray-500 transition-colors rounded-full hover:text-gray-700"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200 bg-gray-50">
+                <th class="w-12 px-4 py-3">
+                  <input
+                    type="checkbox"
+                    class="rounded border-gray-300 text-brand focus:ring-brand"
+                  />
+                </th>
+                <th *ngFor="let column of tableColumns" class="px-4 py-3 text-left">
+                  <span class="text-xs font-semibold tracking-wider text-gray-600 uppercase">
+                    {{ column.header }}
+                  </span>
+                </th>
+                <th class="w-12 px-4 py-3"></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr
+                *ngFor="let request of paginatedData"
+                (click)="handleRowClick(request)"
+                class="transition-colors cursor-pointer hover:bg-gray-50"
+              >
+                <td class="px-4 py-3">
+                  <input
+                    type="checkbox"
+                    class="rounded border-gray-300 text-brand focus:ring-brand"
+                    (click)="$event.stopPropagation()"
+                  />
+                </td>
+                <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                  {{ request.applicationId }}
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-8 h-8 rounded-full bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center"
+                    >
+                      <span class="text-xs font-medium text-gray-600">
+                        {{ request.companyName.charAt(0) }}
+                      </span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900">{{ request.companyName }}</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3">
+                  <span [class]="getCategoryBadgeClass(request.category)">
+                    {{ request.category }}
+                  </span>
+                </td>
+                <td class="px-4 py-3">
+                  <span [class]="getStatusBadgeClass(request.status)">
+                    {{ request.status === 'InProgress' ? 'In Progress' : request.status }}
+                  </span>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="relative" (click)="$event.stopPropagation()">
+                    <button
+                      (click)="toggleMenu(request)"
+                      class="p-1 text-gray-400 transition-colors rounded-lg hover:bg-gray-100 hover:text-gray-600"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      *ngIf="activeMenu === request.applicationId"
+                      class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10"
+                    >
+                      <div class="py-1">
+                        <button
+                          (click)="handleAction({ action: 'view', item: request })"
+                          class="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-50"
+                        >
+                          View Details
+                        </button>
+                        <button
+                          (click)="handleAction({ action: 'edit', item: request })"
+                          class="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-50"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          (click)="handleAction({ action: 'approve', item: request })"
+                          class="w-full px-4 py-2 text-sm text-left text-green-600 hover:bg-gray-50"
+                        >
+                          Approve
+                        </button>
+                        <button
+                          (click)="handleAction({ action: 'reject', item: request })"
+                          class="w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-gray-50"
+                        >
+                          Reject
+                        </button>
+                        <div class="border-t border-gray-100"></div>
+                        <button
+                          (click)="handleAction({ action: 'delete', item: request })"
+                          class="w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-gray-50"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="paginatedData.length === 0">
+                <td colspan="8" class="px-4 py-12 text-center">
+                  <div class="flex flex-col items-center gap-2 text-gray-400">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    <p class="text-sm">No requests found</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div
+          *ngIf="totalPages > 0"
+          class="px-4 py-3 border-t border-gray-200 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-3">
+            <span class="text-sm text-gray-600">
+              Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+              {{ Math.min(currentPage * itemsPerPage, filteredRequests.length) }} of
+              {{ filteredRequests.length }} entries
+            </span>
+            <select
+              [value]="itemsPerPage"
+              (change)="onPageSizeChange($event)"
+              class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
+            >
+              <option *ngFor="let size of pageSizeOptions" [value]="size">
+                {{ size }} per page
+              </option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              (click)="onPageChange(currentPage - 1)"
+              [disabled]="currentPage === 1"
+              class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            <button
+              *ngFor="let page of getPageNumbers()"
+              (click)="onPageChange(page)"
+              [class]="
+                currentPage === page
+                  ? 'px-3 py-1 text-sm bg-brand text-white rounded-lg'
+                  : 'px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50'
+              "
+            >
+              {{ page }}
+            </button>
+            <button
+              (click)="onPageChange(currentPage + 1)"
+              [disabled]="currentPage === totalPages"
+              class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Sidebar -->
+      <div class="w-full lg:w-80">
+        <div
+          class="sticky top-6 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
+        >
+          <div class="p-5 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Quick Actions</h3>
+            <p class="mt-1 text-sm text-gray-500">Common tasks and shortcuts</p>
+          </div>
+          <div class="p-2">
+            <button
+              (click)="reviewPendingApplications()"
+              class="w-full flex items-center gap-3 p-3 text-left rounded-xl hover:bg-gray-50 transition-colors group"
+            >
+              <div
+                class="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">Review Pending</p>
+                <p class="text-xs text-gray-500">Review pending applications</p>
+              </div>
+              <svg
+                class="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+
+            <button
+              (click)="viewApplicationReports()"
+              class="w-full flex items-center gap-3 p-3 text-left rounded-xl hover:bg-gray-50 transition-colors group"
+            >
+              <div
+                class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
+                </svg>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">Application Reports</p>
+                <p class="text-xs text-gray-500">Generate reports</p>
+              </div>
+            </button>
+
+            <button
+              (click)="viewAllVendors()"
+              class="w-full flex items-center gap-3 p-3 text-left rounded-xl hover:bg-gray-50 transition-colors group"
+            >
+              <div
+                class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">View All Vendors</p>
+                <p class="text-xs text-gray-500">Complete vendor list</p>
+              </div>
+            </button>
+
+            <button
+              (click)="viewVendorCategorySummary()"
+              class="w-full flex items-center gap-3 p-3 text-left rounded-xl hover:bg-gray-50 transition-colors group"
+            >
+              <div
+                class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"
+                  />
+                </svg>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">Category Summary</p>
+                <p class="text-xs text-gray-500">Vendor breakdown</p>
+              </div>
+              <svg
+                class="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,357 @@
+<div class="flex h-screen bg-gray-50 font-sans overflow-hidden">
+  <!-- Mobile Menu Overlay -->
+  <div class="fixed inset-0 bg-black/50 z-20 lg:hidden hidden" id="sidebarOverlay"></div>
+
+  <!-- Sidebar - Responsive -->
+  <aside
+    class="fixed lg:static inset-y-0 left-0 w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200/80 shadow-lg flex flex-col transform transition-transform duration-300 ease-in-out z-30 -translate-x-full lg:translate-x-0"
+    id="sidebar"
+    style="background-image: url('/images/bg-circuit-yl.png')"
+  >
+    <!-- Gradient overlay -->
+    <div
+      class="absolute inset-0 bg-linear-to-t from-brand via-red-200/30 to-transparent opacity-30 pointer-events-none"
+    ></div>
+
+    <!-- Logo with gradient accent -->
+    <div class="flex items-center justify-between gap-3 px-5 py-6 border-b border-gray-100">
+      <img src="logo/arbha-logo.png" alt="Bin Quraya" class="md:w-32 w-32" />
+
+      <!-- Close button for mobile -->
+      <button class="lg:hidden text-gray-500 hover:text-gray-700" id="closeSidebar">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Menu with modern styling -->
+    <nav class="flex-1 py-3 space-y-1 px-3 overflow-y-auto">
+      <!-- Dashboard -->
+      <a
+        routerLink="/buyer"
+        routerLinkActive="bg-linear-to-r from-sky-50 to-transparent text-brand font-medium rounded-xl border-l-4 border-brand shadow-sm"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100/80 rounded-lg transition-all duration-100 group"
+      >
+        <svg
+          class="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform duration-100 group-hover:text-gray-900"
+          routerLinkActive="text-brand"
+          [routerLinkActiveOptions]="{ exact: true }"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span class="text-sm font-medium">Dashboard</span>
+      </a>
+
+      <!-- Requests -->
+      <a
+        routerLink="/buyer/application-requests"
+        routerLinkActive="bg-linear-to-r from-sky-50 to-transparent text-brand font-medium rounded-xl border-l-4 border-brand shadow-sm"
+        class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100/80 rounded-lg transition-all duration-100 group"
+      >
+        <svg
+          class="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform duration-100 group-hover:text-gray-900"
+          class="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform duration-100 group-hover:text-gray-900"
+          routerLinkActive="text-brand"
+          [routerLinkActiveOptions]="{ exact: true }"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm4.996 2a1 1 0 0 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM11 8a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-6Zm-4.004 3a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM11 11a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-6Zm-4.004 3a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM11 14a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-6Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+
+        <span class="text-sm font-medium">Application Requests</span>
+        <!-- <span class="ml-auto bg-red-100 text-brand text-xs px-2 py-0.5 rounded-full">12</span> -->
+      </a>
+
+      <a
+        routerLink="/buyer/registration-requests"
+        routerLinkActive="bg-linear-to-r from-sky-50 to-transparent text-brand font-medium rounded-xl border-l-4 border-brand shadow-sm"
+        class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100/80 rounded-lg transition-all duration-100 group"
+      >
+        <svg
+          class="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform duration-100 group-hover:text-gray-900"
+          class="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform duration-100 group-hover:text-gray-900"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path fill="currentColor" d="M4 19v2c0 .5523.44772 1 1 1h14c.5523 0 1-.4477 1-1v-2H4Z" />
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M9 3c0-.55228.44772-1 1-1h8c.5523 0 1 .44772 1 1v3c0 .55228-.4477 1-1 1h-2v1h2c.5096 0 .9376.38314.9939.88957L19.8951 17H4.10498l.90116-8.11043C5.06241 8.38314 5.49047 8 6.00002 8H12V7h-2c-.55228 0-1-.44772-1-1V3Zm1.01 8H8.00002v2.01H10.01V11Zm.99 0h2.01v2.01H11V11Zm5.01 0H14v2.01h2.01V11Zm-8.00998 3H10.01v2.01H8.00002V14ZM13.01 14H11v2.01h2.01V14Zm.99 0h2.01v2.01H14V14ZM11 4h6v1h-6V4Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+
+        <span class="text-sm font-medium">Registration Requests</span>
+        <!-- <span class="ml-auto bg-red-100 text-brand text-xs px-2 py-0.5 rounded-full">12</span> -->
+      </a>
+
+      <!-- Divider -->
+      <div class="my-4 border-t border-gray-200/60"></div>
+
+      <!-- Profile -->
+      <a
+        routerLink="/buyer/profile"
+        routerLinkActive="bg-linear-to-r from-sky-50 to-transparent text-brand font-medium rounded-xl border-l-4 border-brand shadow-sm"
+        class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100/80 rounded-lg transition-all duration-100 group"
+      >
+        <svg
+          class="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform duration-100 group-hover:text-gray-900"
+          class="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform duration-100 group-hover:text-gray-900"
+          routerLinkActive="text-brand"
+          [routerLinkActiveOptions]="{ exact: true }"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span class="text-sm font-medium">Profile</span>
+      </a>
+
+      <!-- Settings -->
+      <a
+        routerLink="/buyer/settings"
+        routerLinkActive="bg-linear-to-r from-sky-50 to-transparent text-brand font-medium rounded-xl border-l-4 border-brand shadow-sm"
+        class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100/80 rounded-lg transition-all duration-100 group"
+      >
+        <svg
+          class="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform duration-100 group-hover:text-gray-900"
+          class="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform duration-100 group-hover:text-gray-900"
+          routerLinkActive="text-brand"
+          [routerLinkActiveOptions]="{ exact: true }"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M9.586 2.586A2 2 0 0 1 11 2h2a2 2 0 0 1 1.414.586l.807.807c.26.26.614.434.998.477l1.08.127a2 2 0 0 1 1.706 1.706l.127 1.08c.043.384.217.738.477.998l.807.807A2 2 0 0 1 22 11v2a2 2 0 0 1-.586 1.414l-.807.807c-.26.26-.434.614-.477.998l-.127 1.08a2 2 0 0 1-1.706 1.706l-1.08.127c-.384.043-.738.217-.998.477l-.807.807A2 2 0 0 1 13 22h-2a2 2 0 0 1-1.414-.586l-.807-.807c-.26-.26-.614-.434-.998-.477l-1.08-.127a2 2 0 0 1-1.706-1.706l-.127-1.08a2.002 2.002 0 0 0-.477-.998l-.807-.807A2 2 0 0 1 2 13v-2a2 2 0 0 1 .586-1.414l.807-.807c.26-.26.434-.614.477-.998l.127-1.08a2 2 0 0 1 1.706-1.706l1.08-.127c.384-.043.738-.217.998-.477l.807-.807ZM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span class="text-sm font-medium">Settings</span>
+      </a>
+      <!-- Logout -->
+      <a
+        (click)="logout()"
+        routerLinkActive="bg-linear-to-r from-sky-50 to-transparent text-brand font-medium rounded-xl border-l-4 border-brand shadow-sm"
+        class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100/80 rounded-lg transition-all duration-100 group"
+      >
+        <svg
+          class="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform duration-100 group-hover:text-gray-900"
+          routerLinkActive="text-brand"
+          [routerLinkActiveOptions]="{ exact: true }"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 3a2 2 0 0 0-2 2v3a1 1 0 1 0 2 0V5h6v14h-6v-3a1 1 0 1 0-2 0v3a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-6Zm-1.707 6.293a1 1 0 0 1 1.414 0L13 12l-3.293 2.707a1 1 0 1 1-1.414-1.414L10.586 13H4a1 1 0 1 1 0-2h6.586L8.293 10.707a1 1 0 0 1 0-1.414Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span class="text-sm font-medium">Logout</span>
+      </a>
+    </nav>
+
+    <!-- User profile at bottom of sidebar -->
+    <div class="p-4 border-t border-gray-200/80 mt-auto">
+      <div class="flex items-center gap-3 bg-gray-50/80 rounded-xl p-3">
+        <div
+          class="w-9 h-9 bg-linear-to-br from-sky-500 to-sky-800 text-white rounded-lg flex items-center justify-center font-semibold shadow-sm"
+        >
+          AS
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-800 truncate">Arbha Software Solutions</p>
+          <p class="text-xs text-gray-500 truncate">company@arbhasoft.com</p>
+        </div>
+        <button class="text-gray-400 hover:text-gray-800">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              d="M9 5l7 7-7 7"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Area -->
+  <div class="flex-1 flex flex-col overflow-hidden w-full">
+    <!-- Top Navbar - Modern with blur effect -->
+    <header
+      class="bg-white/80 backdrop-blur-sm border-b border-gray-200/80 px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between sticky top-0 z-10"
+    >
+      <!-- Left: Mobile menu button and page title -->
+      <div class="flex items-center gap-3">
+        <!-- Mobile Menu Button -->
+        <button
+          class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          id="menuToggle"
+        >
+          <svg class="w-5 h-5 text-gray-800" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <div>
+          <h1 class="text-lg sm:text-xl font-semibold text-gray-800">Dashboard</h1>
+          <p class="text-xs text-gray-500 mt-0.5 hidden sm:block">Home / Dashboard</p>
+        </div>
+      </div>
+
+      <!-- Right Side -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        <!-- Search - Hidden on mobile, visible on tablet/desktop -->
+        <div class="relative hidden sm:block">
+          <input
+            type="text"
+            placeholder="Search..."
+            class="pl-9 pr-4 py-2 bg-gray-100/80 border border-gray-200/60 rounded-xl text-sm w-48 lg:w-64 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+          />
+          <svg
+            class="w-4 h-4 text-gray-400 absolute left-3 top-2.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2" />
+          </svg>
+        </div>
+
+        <!-- Mobile Search Icon -->
+        <button class="sm:hidden p-2 text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2" />
+          </svg>
+        </button>
+
+        <!-- Notification with badge -->
+        <button
+          class="relative p-2 text-gray-800 hover:bg-gray-100 rounded-lg sm:rounded-xl transition-colors"
+        >
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              stroke-width="1.5"
+            />
+          </svg>
+          <span
+            class="absolute top-1 right-1 w-2 h-2 bg-sky-500 rounded-full ring-2 ring-white"
+          ></span>
+        </button>
+
+        <!-- User Menu - Desktop version -->
+        <div class="relative group hidden sm:block">
+          <button
+            class="flex items-center gap-3 bg-linear-to-r from-gray-50 to-white border border-gray-200/80 rounded-xl px-3 py-1.5 hover:shadow-md transition-all"
+          >
+            <div
+              class="w-8 h-8 bg-linear-to-br from-sky-500 to-sky-800 text-white rounded-lg flex items-center justify-center font-semibold text-sm shadow-sm"
+            >
+              A
+            </div>
+            <div class="text-left hidden lg:block">
+              <span class="block text-sm font-semibold text-gray-800">Arbhasoft</span>
+              <span class="block text-xs text-gray-500">Buyer</span>
+            </div>
+            <svg
+              class="w-4 h-4 text-gray-400 group-hover:rotate-180 transition-transform"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path
+                d="M19 9l-7 7-7-7"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Mobile User Icon -->
+        <button
+          class="sm:hidden w-8 h-8 bg-linear-to-br from-sky-500 to-red-700 text-white rounded-lg flex items-center justify-center font-semibold text-sm shadow-sm"
+        >
+          A
+        </button>
+      </div>
+    </header>
+
+    <!-- Content - Scrollable area with modern cards -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 p-4 sm:p-6 lg:p-8">
+      <!-- Stats Cards -->
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+
+<!-- Mobile Sidebar Toggle Script -->
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const closeBtn = document.getElementById('closeSidebar');
+
+  function openSidebar() {
+    sidebar.classList.remove('-translate-x-full');
+    overlay.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+
+  function closeSidebar() {
+    sidebar.classList.add('-translate-x-full');
+    overlay.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+
+  menuToggle?.addEventListener('click', openSidebar);
+  closeBtn?.addEventListener('click', closeSidebar);
+  overlay?.addEventListener('click', closeSidebar);
+</script>

@@ -1,0 +1,66 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import 'flowbite/src/themes/default';
+@plugin "flowbite/plugin";
+@import 'tailwindcss';
+
+/* regular style toast */
+@import 'ngx-toastr/toastr';
+
+@theme {
+  /* Override the default sans font with Inter */
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+
+  /* Brand */
+  /* --color-brand-primary: #fd0000;
+  --color-brand-primary-hover: #a60000; */
+
+  --color-brand-primary: #1f7fb2;
+  --color-brand-primary-hover: #145576;
+
+  /* Neutral */
+  --color-neutral-dark: #000000;
+  --color-neutral-gray: #4c4c4c;
+
+  /* Status Colors */
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+
+  /* --color-brand-300: #ed4949;
+  --color-brand-400: #ce2e2e;
+  --color-brand-500: #ba1f1f;
+  --color-brand-600: #ab1515;
+  --color-brand-800: #940000;
+  --color-brand: #940000;
+  --color-fg-brand: #940000; */
+
+  --color-brand-300: #6fb3d6;
+  --color-brand-400: #4fa3d1;
+  --color-brand-500: #1f7fb2;
+  --color-brand-600: #196a94;
+  --color-brand-800: #145576;
+  /* --color-brand: #145576;
+  --color-fg-brand: #145576; */
+  --color-brand: #196a94;
+  --color-fg-brand: #196a94;
+  --color-brand-subtle: #fff1f1;
+  --color-ring-brand-soft: #fff1f1;
+}
+
+:root {
+  --color-background: #ffffff;
+}
+
+.dark {
+  --color-background: #0f0f0f;
+}
+
+/* Your custom toast class */
+.my-custom-toast {
+  border-radius: 15px !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+}
