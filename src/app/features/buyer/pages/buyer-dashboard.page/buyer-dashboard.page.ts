@@ -7,19 +7,10 @@ import {
   ApexStroke,
   NgApexchartsModule,
 } from 'ng-apexcharts';
-import { HttpClient } from '@angular/common/http';
-
-interface AdminStats {
-  submitted: number;
-  underReview: number;
-  approved: number;
-  rejected: number;
-  total: number;
-  newVendors: number;
-  pendingEmails: number;
-  approvalRate: string;
-  pendingReview: number;
-}
+import {
+  BuyerDashboardService,
+  BuyerDashboardStats,
+} from '../../services/dashboard/buyer-dashboard.service';
 
 @Component({
   selector: 'app-buyer-dashboard.page',
@@ -28,22 +19,20 @@ interface AdminStats {
   styleUrl: './buyer-dashboard.page.css',
 })
 export class BuyerDashboardPage implements OnInit {
-  private readonly http = inject(HttpClient);
+  private readonly dashboardService = inject(BuyerDashboardService);
 
-  stats = signal<AdminStats | null>(null);
+  stats = signal<BuyerDashboardStats | null>(null);
+  loading = signal(true);
 
   ngOnInit() {
-    this.http.get<{ success: boolean; stats: AdminStats }>('/admin/stats').subscribe({
-      next: (res) => this.stats.set(res.stats),
-      error: () => {},
+    this.dashboardService.getStats().subscribe({
+      next: (res) => {
+        this.stats.set(res.data);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
     });
   }
-  //  series: ApexAxisChartSeries = [
-  //     {
-  //       name: "Sales",
-  //       data: [10, 41, 35, 51, 49, 62]
-  //     }
-  //   ];
 
   chart: ApexChart = {
     type: 'area',
@@ -102,40 +91,17 @@ export class BuyerDashboardPage implements OnInit {
 
   barChartOptions = {
     series: [
-      {
-        name: 'Completed',
-        data: [0, 0, 13, 0, 20, 0, 25, 20],
-      },
-      {
-        name: 'Processing',
-        data: [0, 0, 0, 0, 10, 20, 25, 40],
-      },
-      {
-        name: 'Pending',
-        data: [10, 0, 0, 0, 0, 0, 0, 0],
-      },
-      {
-        name: 'Cancelled',
-        data: [0, 11, 0, 12, 0, 36, 0, 0],
-      },
+      { name: 'Completed', data: [0, 0, 13, 0, 20, 0, 25, 20] },
+      { name: 'Processing', data: [0, 0, 0, 0, 10, 20, 25, 40] },
+      { name: 'Pending', data: [10, 0, 0, 0, 0, 0, 0, 0] },
+      { name: 'Cancelled', data: [0, 11, 0, 12, 0, 36, 0, 0] },
     ],
 
-    chart: {
-      type: 'bar',
-      height: 250,
-      stacked: true,
-      toolbar: { show: false },
-    },
+    chart: { type: 'bar', height: 250, stacked: true, toolbar: { show: false } },
 
-    plotOptions: {
-      bar: {
-        columnWidth: '75%',
-      },
-    },
+    plotOptions: { bar: { columnWidth: '75%' } },
 
-    dataLabels: {
-      enabled: false,
-    },
+    dataLabels: { enabled: false },
 
     xaxis: {
       categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -143,36 +109,20 @@ export class BuyerDashboardPage implements OnInit {
       axisTicks: { show: false },
     },
 
-    yaxis: {
-      labels: { show: false },
-    },
+    yaxis: { labels: { show: false } },
 
-    grid: {
-      padding: {
-        left: 0,
-        right: 0,
-      },
-    },
+    grid: { padding: { left: 0, right: 0 } },
 
-    colors: [
-      '#145576',
-      '#1F7FB2',
-      '#4FA3D1', // soft accent blue instead of gray
-      '#e5e7eb',
-    ],
+    colors: ['#145576', '#1F7FB2', '#4FA3D1', '#e5e7eb'],
   };
 
-  // Chart 1: Donut Chart (Payment Status)
-  paymentStatusSeries = [5, 2]; // Paid: 5, Pending: 2
   paymentStatusLabels = ['Paid', 'Pending'];
-  paymentStatusColors = ['#1F7FB2', '#145576']; // primary blue, dark blue
+  paymentStatusColors = ['#1F7FB2', '#145576'];
 
-  // Chart 2: Pie Chart (Orders by Category)
-  orderCategorySeries = [44, 33, 23]; // Example: 44% Metal, 33% Plastic, 23% Electronic
+  orderCategorySeries = [44, 33, 23];
   orderCategoryLabels = ['Metal', 'Plastic', 'Electronic'];
-  orderCategoryColors = ['#1F7FB2', '#145576', '#9ca3af']; // blue shades + gray
+  orderCategoryColors = ['#1F7FB2', '#145576', '#9ca3af'];
 
-  // Shared chart configurations
   paymentStatusChart: ApexChart = {
     type: 'donut',
     height: 220,
@@ -209,10 +159,15 @@ export class BuyerDashboardPage implements OnInit {
     },
   ];
 
-  // Subtle border option - barely visible white border
   chartStroke = {
     show: true,
-    width: 3, // Width of 3px
-    colors: ['#F2940000'], // Fully transparent
+    width: 3,
+    colors: ['#F2940000'],
   };
+
+  get paymentStatusSeries(): number[] {
+    const s = this.stats();
+    if (!s?.invoices) return [0, 0];
+    return [s.invoices.paid, s.invoices.pending];
+  }
 }
