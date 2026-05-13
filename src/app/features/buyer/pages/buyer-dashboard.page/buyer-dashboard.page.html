@@ -2,7 +2,7 @@
   <!-- Welcome Section -->
   <div class="space-y-1">
     <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight">
-      Welcome, Arbha Software Solutions.
+      Welcome back
     </h1>
     <p class="text-sm sm:text-base text-gray-500">
       Here's a summary of your recent activities and status.
@@ -10,80 +10,62 @@
   </div>
 
   <!-- Stats Cards -->
-  @if (stats(); as s) {
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <!-- Submitted Requests Card -->
-    <div
-      class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow"
-    >
-      <div class="flex items-center gap-4">
-        <div
-          class="w-12 h-12 flex items-center justify-center rounded-xl bg-sky-50 text-sky-600 text-xl font-bold shrink-0"
-        >
-          {{ s.submitted }}
+  @if (loading()) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (_ of [1, 2, 3]; track _) {
+        <div class="bg-white rounded-2xl border border-gray-100 p-5 animate-pulse h-24"></div>
+      }
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Submitted Requests Card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-sky-50 text-sky-600 text-xl font-bold shrink-0">
+            {{ stats()?.totalRfqs ?? '—' }}
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">Submitted Requests</p>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-sm text-gray-500">{{ stats()?.totalVendors ?? 0 }} Total</span>
+              <span class="text-xs text-sky-600 bg-sky-50 px-2 py-0.5 rounded-full">{{ stats()?.newVendors ?? 0 }} new</span>
+            </div>
+          </div>
         </div>
-        <div>
-          <p class="font-semibold text-gray-800">Submitted Requests</p>
-          <div class="flex items-center gap-2 mt-1">
-            <span class="text-sm text-gray-500">{{ s.total }} Total</span>
-            <span class="text-xs text-sky-600 bg-sky-50 px-2 py-0.5 rounded-full">{{ s.newVendors }} new</span>
+      </div>
+
+      <!-- Pending Review Card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-yellow-50 text-yellow-600 text-xl font-bold shrink-0">
+            {{ stats()?.pendingReview ?? '—' }}
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">Pending Review</p>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-sm text-gray-500">{{ stats()?.openRfqs ?? 0 }} Under Review</span>
+              <span class="text-xs text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded-full">Awaiting</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Approved Vendors Card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-green-50 text-green-600 text-xl font-bold shrink-0">
+            {{ stats()?.approvedVendors ?? '—' }}
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">Approved Vendors</p>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-sm text-gray-500">{{ stats()?.approvalRate ?? '0%' }} rate</span>
+              <span class="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Active</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Pending Review Card -->
-    <div
-      class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow"
-    >
-      <div class="flex items-center gap-4">
-        <div
-          class="w-12 h-12 flex items-center justify-center rounded-xl bg-yellow-50 text-yellow-600 text-xl font-bold shrink-0"
-        >
-          {{ s.pendingReview }}
-        </div>
-        <div>
-          <p class="font-semibold text-gray-800">Pending Review</p>
-          <div class="flex items-center gap-2 mt-1">
-            <span class="text-sm text-gray-500">{{ s.underReview }} Under Review</span>
-            <span class="text-xs text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded-full"
-              >Awaiting</span
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Approved Vendors Card -->
-    <div
-      class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1"
-    >
-      <div class="flex items-center gap-4">
-        <div
-          class="w-12 h-12 flex items-center justify-center rounded-xl bg-green-50 text-green-600 text-xl font-bold shrink-0"
-        >
-          {{ s.approved }}
-        </div>
-        <div>
-          <p class="font-semibold text-gray-800">Approved Vendors</p>
-          <div class="flex items-center gap-2 mt-1">
-            <span class="text-sm text-gray-500">{{ s.approvalRate }} rate</span>
-            <span class="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full"
-              >Active</span
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  }
-
-  @if (!stats()) {
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    @for (_ of [1,2,3]; track _) {
-      <div class="bg-white rounded-2xl border border-gray-100 p-5 animate-pulse h-20"></div>
-    }
-  </div>
   }
 
   <!-- Main Content Area: Chart & Table (Left) + Side Cards (Right) -->
@@ -101,16 +83,12 @@
 
           <div class="flex flex-wrap items-center gap-3">
             <span class="text-sm text-gray-500">Domain:</span>
-            <select
-              class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
-            >
+            <select class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500">
               <option>Metal</option>
               <option>Plastic</option>
               <option>Electronic</option>
             </select>
-            <select
-              class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
-            >
+            <select class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500">
               <option>All</option>
               <option>2024</option>
               <option>2025</option>
@@ -128,8 +106,7 @@
           [xaxis]="chartOptions.xaxis"
           [colors]="chartOptions.colors"
           [dataLabels]="dataLabels"
-        >
-        </apx-chart>
+        ></apx-chart>
 
         <!-- Legend -->
         <div class="flex flex-wrap gap-4 sm:gap-6 mt-4 text-xs sm:text-sm text-gray-600">
@@ -153,9 +130,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Donut Chart: Payment Status -->
-        <div
-          class="bg-linear-to-tl from-brand/10 to-brand/1 rounded-2xl shadow-sm border border-gray-100 p-5"
-        >
+        <div class="bg-linear-to-tl from-brand/10 to-brand/1 rounded-2xl shadow-sm border border-gray-100 p-5">
           <h4 class="font-semibold text-gray-800 mb-3">Payment Status Breakdown</h4>
           <apx-chart
             [series]="paymentStatusSeries"
@@ -171,9 +146,7 @@
         </div>
 
         <!-- Pie Chart: Orders by Category -->
-        <div
-          class="bg-linear-to-tl from-brand/10 to-brand/1 rounded-2xl shadow-sm border border-gray-100 p-5"
-        >
+        <div class="bg-linear-to-tl from-brand/10 to-brand/1 rounded-2xl shadow-sm border border-gray-100 p-5">
           <h4 class="font-semibold text-gray-800 mb-3">Orders by Category</h4>
           <apx-chart
             [series]="orderCategorySeries"
@@ -193,9 +166,7 @@
     <!-- Right Column: Side Cards (3 cols) -->
     <div class="lg:col-span-3 space-y-6">
       <!-- Spend Analytics Card -->
-      <div
-        class="bg-linear-to-tl from-brand/10 to-brand/1 rounded-2xl shadow-sm border border-gray-100 p-5"
-      >
+      <div class="bg-linear-to-tl from-brand/10 to-brand/1 rounded-2xl shadow-sm border border-gray-100 p-5">
         <h3 class="font-semibold text-gray-800 mb-3">Spend Analytics</h3>
         <apx-chart
           [series]="barChartOptions.series"
@@ -206,66 +177,82 @@
           [yaxis]="barChartOptions.yaxis"
           [colors]="barChartOptions.colors"
           [grid]="barChartOptions.grid"
-        >
-        </apx-chart>
+        ></apx-chart>
 
         <div class="mt-4 space-y-3">
           <div>
             <p class="font-medium text-gray-800">Active Requests</p>
-            <p class="text-xs text-gray-500 mt-0.5">Total: 7</p>
+            <p class="text-xs text-gray-500 mt-0.5">Total: {{ stats()?.purchaseOrders?.total ?? 0 }}</p>
           </div>
 
           <div class="space-y-2">
             <div class="flex justify-between text-sm">
               <span class="text-blue-600 flex items-center gap-1">
                 <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
-                3 Quotation
+                Quotations
               </span>
-              <span class="font-medium text-gray-700">3</span>
+              <span class="font-medium text-gray-700">{{ stats()?.openRfqs ?? 0 }}</span>
             </div>
             <div class="flex justify-between text-sm">
               <span class="text-amber-600 flex items-center gap-1">
                 <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
-                4 Purchase Requests
+                Purchase Orders
               </span>
-              <span class="font-medium text-gray-700">4</span>
+              <span class="font-medium text-gray-700">{{ stats()?.purchaseOrders?.active ?? 0 }}</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Payment Status Card -->
-      <div
-        class="bg-linear-to-tl from-brand/10 to-brand/1 rounded-2xl shadow-sm border border-gray-100 p-5"
-      >
+      <div class="bg-linear-to-tl from-brand/10 to-brand/1 rounded-2xl shadow-sm border border-gray-100 p-5">
         <h3 class="font-semibold text-gray-800 mb-4">Payment Status</h3>
 
-        <div class="space-y-3">
-          <div class="flex justify-between text-sm">
-            <span class="text-gray-600">Paid</span>
-            <span class="font-medium text-gray-800">5</span>
+        @if (loading()) {
+          <div class="space-y-3 animate-pulse">
+            <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div class="h-4 bg-gray-200 rounded w-full"></div>
           </div>
-
-          <div>
-            <div class="flex justify-between text-sm mb-1">
-              <span class="text-amber-600">Pending</span>
-              <span class="font-medium text-gray-700">2</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="flex-1 bg-gray-100 rounded-full h-2">
-                <div class="bg-amber-400 h-2 rounded-full" style="width: 33%"></div>
-              </div>
-              <span class="text-xs text-gray-500">33%</span>
-            </div>
-          </div>
-
-          <div class="pt-2 border-t border-gray-100">
+        } @else {
+          <div class="space-y-3">
             <div class="flex justify-between text-sm">
-              <span class="text-gray-600">Total</span>
-              <span class="font-medium text-gray-800">7</span>
+              <span class="text-gray-600">Paid</span>
+              <span class="font-medium text-gray-800">{{ stats()?.invoices?.paid ?? 0 }}</span>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-amber-600">Pending</span>
+                <span class="font-medium text-gray-700">{{ stats()?.invoices?.pending ?? 0 }}</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="flex-1 bg-gray-100 rounded-full h-2">
+                  <div
+                    class="bg-amber-400 h-2 rounded-full"
+                    [style.width.%]="stats()?.invoices?.total
+                      ? (stats()!.invoices.pending / stats()!.invoices.total) * 100
+                      : 0"
+                  ></div>
+                </div>
+                <span class="text-xs text-gray-500">
+                  {{
+                    stats()?.invoices?.total
+                      ? ((stats()!.invoices.pending / stats()!.invoices.total) * 100 | number: '1.0-0')
+                      : 0
+                  }}%
+                </span>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-gray-100">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Total</span>
+                <span class="font-medium text-gray-800">{{ stats()?.invoices?.total ?? 0 }}</span>
+              </div>
             </div>
           </div>
-        </div>
+        }
       </div>
     </div>
   </div>
