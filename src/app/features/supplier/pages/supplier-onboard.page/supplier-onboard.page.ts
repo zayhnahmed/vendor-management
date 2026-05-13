@@ -6,9 +6,9 @@ import { SupplierFinanceInfo } from '../../forms/supplier-finance-info/supplier-
 import { SupplierQualityInfo } from '../../forms/supplier-quality-info/supplier-quality-info';
 import { Store } from '@ngrx/store';
 import { selectOnboardingLoaded, selectSupplierCurrentStep } from '../../store/supplier-onboarding/supplier-onboarding.selector';
-import { loadSupplierOnboardingStatus } from '../../store/supplier-onboarding/supplier-onboarding.actions';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { SupplierOnboardingFacade } from '../../store/supplier-onboarding/supplier-onboarding.facade';
+import { SupplierOnboardService } from '../../services/supplier-onboard/supplier-onboard.service';
 
 interface StepConfig {
   label: string;
@@ -24,49 +24,33 @@ interface StepConfig {
 })
 export class SupplierOnboardPage implements OnInit {
   private store = inject(Store);
-  private readonly toastr = inject(ToastrService);
+  private facade = inject(SupplierOnboardingFacade);
+  private onboardService = inject(SupplierOnboardService);
 
   currentStep$ = this.store.select(selectSupplierCurrentStep);
   loaded$ = this.store.select(selectOnboardingLoaded);
 
-  // Define your steps configuration
   steps: StepConfig[] = [
-    {
-      label: 'General Information',
-      component: SupplierGeneralInfo,
-      stepNumber: 1,
-    },
-    {
-      label: 'Financial Information',
-      component: SupplierFinanceInfo,
-      stepNumber: 2,
-    },
-    {
-      label: 'Quality & Compliance',
-      component: SupplierQualityInfo,
-      stepNumber: 3,
-    },
+    { label: 'General Information', component: SupplierGeneralInfo, stepNumber: 1 },
+    { label: 'Financial Information', component: SupplierFinanceInfo, stepNumber: 2 },
+    { label: 'Quality & Compliance', component: SupplierQualityInfo, stepNumber: 3 },
   ];
 
   ngOnInit() {
-    this.store.dispatch(loadSupplierOnboardingStatus());
-  }
-
-  // onStepChange(step: number) {
-  //   this.store.dispatch(loadSupplierStep({ step }));
-  // }
-
-  onClickStep(step: number) {
-    console.log(step, 'dfhgdhf');
+    this.onboardService.getPendingTasks().subscribe({
+      next: (res) => {
+        const tasks = res?.data ?? res;
+        const first = Array.isArray(tasks) ? tasks[0] : null;
+        if (first?.relationshipId) {
+          this.facade.setRelationshipId(first.relationshipId);
+        }
+        this.facade.loadStatus();
+      },
+      error: () => this.facade.loadStatus(),
+    });
   }
 
   isEditable(step: number, completedStep: number) {
-    const editable = step <= completedStep;
-
-    // if (!editable) {
-    //   this.toastr.error('Hello world!', 'Toastr fun!');
-    // }
-
-    return editable;
+    return step <= completedStep;
   }
 }
