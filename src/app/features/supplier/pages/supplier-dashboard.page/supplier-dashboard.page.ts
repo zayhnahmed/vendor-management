@@ -1,8 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ApexDataLabels, ApexPlotOptions, ApexStroke, NgApexchartsModule } from 'ng-apexcharts';
 import { ApexChart } from 'ng-apexcharts';
 import { AuthUserFacade } from '../../../auth/store/user/user.facade';
 import { CommonModule } from '@angular/common';
+import {
+  VendorDashboardService,
+  VendorDashboardStats,
+} from '../../services/dashboard/vendor-dashboard.service';
 
 @Component({
   selector: 'app-supplier-dashboard.page',
@@ -11,18 +15,22 @@ import { CommonModule } from '@angular/common';
   styleUrl: './supplier-dashboard.page.css',
 })
 export class SupplierDashboardPage implements OnInit {
-  private readonly authUserFacade: AuthUserFacade = inject(AuthUserFacade);
-  //  series: ApexAxisChartSeries = [
-  //     {
-  //       name: "Sales",
-  //       data: [10, 41, 35, 51, 49, 62]
-  //     }
-  //   ];
+  private readonly authUserFacade = inject(AuthUserFacade);
+  private readonly dashboardService = inject(VendorDashboardService);
 
   user$ = this.authUserFacade.user$;
+  stats = signal<VendorDashboardStats | null>(null);
+  loading = signal(true);
 
   ngOnInit(): void {
     this.authUserFacade.loadUser();
+    this.dashboardService.getStats().subscribe({
+      next: (res) => {
+        this.stats.set(res.data);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
+    });
   }
 
   chart: ApexChart = {
@@ -51,9 +59,7 @@ export class SupplierDashboardPage implements OnInit {
     markers: {
       size: 5,
       strokeWidth: 2,
-      hover: {
-        size: 7,
-      },
+      hover: { size: 7 },
     },
 
     fill: {
@@ -82,40 +88,17 @@ export class SupplierDashboardPage implements OnInit {
 
   barChartOptions = {
     series: [
-      {
-        name: 'Completed',
-        data: [0, 0, 13, 0, 20, 0, 25, 20],
-      },
-      {
-        name: 'Processing',
-        data: [0, 0, 0, 0, 10, 20, 25, 40],
-      },
-      {
-        name: 'Pending',
-        data: [10, 0, 0, 0, 0, 0, 0, 0],
-      },
-      {
-        name: 'Cancelled',
-        data: [0, 11, 0, 12, 0, 36, 0, 0],
-      },
+      { name: 'Completed', data: [0, 0, 13, 0, 20, 0, 25, 20] },
+      { name: 'Processing', data: [0, 0, 0, 0, 10, 20, 25, 40] },
+      { name: 'Pending', data: [10, 0, 0, 0, 0, 0, 0, 0] },
+      { name: 'Cancelled', data: [0, 11, 0, 12, 0, 36, 0, 0] },
     ],
 
-    chart: {
-      type: 'bar',
-      height: 250,
-      stacked: true,
-      toolbar: { show: false },
-    },
+    chart: { type: 'bar', height: 250, stacked: true, toolbar: { show: false } },
 
-    plotOptions: {
-      bar: {
-        columnWidth: '75%',
-      },
-    },
+    plotOptions: { bar: { columnWidth: '75%' } },
 
-    dataLabels: {
-      enabled: false,
-    },
+    dataLabels: { enabled: false },
 
     xaxis: {
       categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -123,36 +106,20 @@ export class SupplierDashboardPage implements OnInit {
       axisTicks: { show: false },
     },
 
-    yaxis: {
-      labels: { show: false },
-    },
+    yaxis: { labels: { show: false } },
 
-    grid: {
-      padding: {
-        left: 0,
-        right: 0,
-      },
-    },
+    grid: { padding: { left: 0, right: 0 } },
 
-    colors: [
-      '#145576',
-      '#1F7FB2',
-      '#4FA3D1', // soft accent blue instead of gray
-      '#e5e7eb',
-    ],
+    colors: ['#145576', '#1F7FB2', '#4FA3D1', '#e5e7eb'],
   };
 
-  // Chart 1: Donut Chart (Payment Status)
-  paymentStatusSeries = [5, 2]; // Paid: 5, Pending: 2
   paymentStatusLabels = ['Paid', 'Pending'];
-  paymentStatusColors = ['#1F7FB2', '#145576']; // primary blue, dark blue
+  paymentStatusColors = ['#1F7FB2', '#145576'];
 
-  // Chart 2: Pie Chart (Orders by Category)
-  orderCategorySeries = [44, 33, 23]; // Example: 44% Metal, 33% Plastic, 23% Electronic
+  orderCategorySeries = [44, 33, 23];
   orderCategoryLabels = ['Metal', 'Plastic', 'Electronic'];
-  orderCategoryColors = ['#1F7FB2', '#145576', '#9ca3af']; // blue shades + gray
+  orderCategoryColors = ['#1F7FB2', '#145576', '#9ca3af'];
 
-  // Shared chart configurations
   paymentStatusChart: ApexChart = {
     type: 'donut',
     height: 220,
@@ -189,10 +156,15 @@ export class SupplierDashboardPage implements OnInit {
     },
   ];
 
-  // Subtle border option - barely visible white border
   chartStroke = {
     show: true,
-    width: 3, // Width of 3px
-    colors: ['#F2940000'], // Fully transparent
+    width: 3,
+    colors: ['#F2940000'],
   };
+
+  get paymentStatusSeries(): number[] {
+    const s = this.stats();
+    if (!s?.invoices) return [0, 0];
+    return [s.invoices.paid, s.invoices.pending];
+  }
 }
