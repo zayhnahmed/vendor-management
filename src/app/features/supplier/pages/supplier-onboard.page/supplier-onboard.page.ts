@@ -8,7 +8,6 @@ import { Store } from '@ngrx/store';
 import { selectOnboardingLoaded, selectSupplierCurrentStep } from '../../store/supplier-onboarding/supplier-onboarding.selector';
 import { CommonModule } from '@angular/common';
 import { SupplierOnboardingFacade } from '../../store/supplier-onboarding/supplier-onboarding.facade';
-import { SupplierOnboardService } from '../../services/supplier-onboard/supplier-onboard.service';
 
 interface StepConfig {
   label: string;
@@ -25,7 +24,6 @@ interface StepConfig {
 export class SupplierOnboardPage implements OnInit {
   private store = inject(Store);
   private facade = inject(SupplierOnboardingFacade);
-  private onboardService = inject(SupplierOnboardService);
 
   currentStep$ = this.store.select(selectSupplierCurrentStep);
   loaded$ = this.store.select(selectOnboardingLoaded);
@@ -37,17 +35,7 @@ export class SupplierOnboardPage implements OnInit {
   ];
 
   ngOnInit() {
-    this.onboardService.getPendingTasks().subscribe({
-      next: (res) => {
-        const tasks = res?.data ?? res;
-        const first = Array.isArray(tasks) ? tasks[0] : null;
-        if (first?.relationshipId) {
-          this.facade.setRelationshipId(first.relationshipId);
-        }
-        this.facade.loadStatus();
-      },
-      error: () => this.facade.loadStatus(),
-    });
+    this.facade.initOnboarding();
   }
 
   isEditable(step: number, completedStep: number) {
