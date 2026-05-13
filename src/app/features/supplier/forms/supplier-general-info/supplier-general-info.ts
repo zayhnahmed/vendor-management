@@ -22,11 +22,6 @@ export class SupplierGeneralInfo {
   selectedBusinessTypes: BusinessType[] = [];
 
   ngOnInit(): void {
-    this.facade.loadInitialGeneralInfoData().subscribe((data) => {
-      console.log(data);
-      this.vendorForm.patchValue(data);
-    });
-
     this.vendorForm = this.fb.group({
       // Company Details
       companyLegalName: ['', Validators.required],
