@@ -1,0 +1,309 @@
+<div class="max-w-4xl mx-auto space-y-6 sm:space-y-8 bg-gray-50 min-h-screen font-sans">
+
+  <!-- Back -->
+  <div class="flex items-center gap-3">
+    <button
+      (click)="goBack()"
+      class="p-2 rounded-lg hover:bg-gray-200 transition-colors text-gray-500"
+      aria-label="Back to RFQ list"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    <h1 class="text-xl font-bold text-gray-800">RFQ Details</h1>
+  </div>
+
+  @if (loading()) {
+    <div class="space-y-4 animate-pulse">
+      <div class="h-32 bg-white rounded-2xl border border-gray-100"></div>
+      <div class="h-48 bg-white rounded-2xl border border-gray-100"></div>
+    </div>
+  } @else if (error()) {
+    <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl" role="alert">
+      {{ error() }}
+    </div>
+  } @else if (rfq()) {
+    <!-- Header Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-3 flex-wrap">
+            <h2 class="text-xl font-bold text-gray-900">{{ rfq()!.title }}</h2>
+            <span [class]="getStatusBadgeClass(rfq()!.status)">{{ rfq()!.status }}</span>
+          </div>
+          <p class="text-xs text-gray-400">ID: {{ rfq()!.id }}</p>
+          @if (rfq()!.notes) {
+            <p class="text-sm text-gray-600 mt-2">{{ rfq()!.notes }}</p>
+          }
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap gap-2 shrink-0">
+          @if (canDistribute()) {
+            <button
+              (click)="openDistribute()"
+              class="inline-flex items-center gap-2 px-4 py-2 bg-[#940000] text-white text-sm font-medium rounded-xl hover:bg-[#7a0000] transition-colors shadow-sm"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              Distribute
+            </button>
+          }
+          @if (canCancel()) {
+            <button
+              (click)="confirmCancel()"
+              class="inline-flex items-center gap-2 px-4 py-2 border border-red-300 text-red-600 text-sm font-medium rounded-xl hover:bg-red-50 transition-colors"
+            >
+              Cancel RFQ
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Meta Row -->
+      <div class="flex flex-wrap gap-6 mt-4 pt-4 border-t border-gray-100 text-sm text-gray-500">
+        <span>
+          <span class="font-medium text-gray-700">Items:</span> {{ rfq()!.items?.length ?? 0 }}
+        </span>
+        @if (rfq()!.deadline) {
+          <span>
+            <span class="font-medium text-gray-700">Deadline:</span>
+            {{ rfq()!.deadline | date: 'dd MMM yyyy' }}
+          </span>
+        }
+        <span>
+          <span class="font-medium text-gray-700">Created:</span>
+          {{ rfq()!.createdAt | date: 'dd MMM yyyy' }}
+        </span>
+        @if (rfq()!.vendorCount !== undefined) {
+          <span>
+            <span class="font-medium text-gray-700">Vendors:</span> {{ rfq()!.vendorCount }}
+          </span>
+        }
+        @if (rfq()!.quoteCount !== undefined) {
+          <span>
+            <span class="font-medium text-gray-700">Quotes:</span> {{ rfq()!.quoteCount }}
+          </span>
+        }
+      </div>
+    </div>
+
+    <!-- Items Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+      <h3 class="font-semibold text-gray-800 mb-4">Requested Items</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm" role="grid" aria-label="RFQ items">
+          <thead>
+            <tr class="border-b border-gray-100">
+              <th class="text-left py-2.5 pr-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">#</th>
+              <th class="text-left py-2.5 pr-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Material ID</th>
+              <th class="text-left py-2.5 pr-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
+              <th class="text-left py-2.5 pr-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Qty</th>
+              <th class="text-left py-2.5 pr-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Unit</th>
+              <th class="text-left py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of rfq()!.items; track item.id; let i = $index) {
+              <tr class="border-b border-gray-50">
+                <td class="py-3 pr-4 text-gray-500">{{ i + 1 }}</td>
+                <td class="py-3 pr-4 font-mono text-xs text-gray-700">{{ item.materialId }}</td>
+                <td class="py-3 pr-4 text-gray-700">{{ item.materialName ?? '—' }}</td>
+                <td class="py-3 pr-4 font-medium text-gray-800">{{ item.quantity }}</td>
+                <td class="py-3 pr-4 text-gray-600">{{ item.unit ?? '—' }}</td>
+                <td class="py-3 text-gray-500">{{ item.description ?? '—' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Quotes Card (visible for OPEN, CLOSED, AWARDED) -->
+    @if (rfq()!.status === 'OPEN' || rfq()!.status === 'CLOSED' || rfq()!.status === 'AWARDED') {
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+        <h3 class="font-semibold text-gray-800 mb-4">Vendor Quotes</h3>
+
+        @if (quotesLoading()) {
+          <div class="space-y-3 animate-pulse">
+            @for (_ of [1, 2]; track _) {
+              <div class="h-20 bg-gray-100 rounded-xl"></div>
+            }
+          </div>
+        } @else if (quotes().length === 0) {
+          <p class="text-sm text-gray-400 text-center py-8">No quotes received yet.</p>
+        } @else {
+          <div class="space-y-4">
+            @for (quote of quotes(); track quote.id) {
+              <div class="border border-gray-100 rounded-xl p-4 hover:border-gray-200 transition-colors">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <p class="font-medium text-gray-800">{{ quote.vendorName ?? quote.vendorOrgId }}</p>
+                    <p class="text-xs text-gray-400 mt-0.5">
+                      Submitted {{ quote.createdAt | date: 'dd MMM yyyy, HH:mm' }}
+                    </p>
+                    @if (quote.notes) {
+                      <p class="text-sm text-gray-600 mt-1">{{ quote.notes }}</p>
+                    }
+                  </div>
+                  <div class="flex items-center gap-3">
+                    @if (quote.totalAmount !== undefined) {
+                      <span class="text-lg font-bold text-gray-900">
+                        {{ quote.totalAmount | number: '1.2-2' }}
+                      </span>
+                    }
+                    @if (canAward()) {
+                      <button
+                        (click)="awardQuote(quote.id)"
+                        [disabled]="awarding() === quote.id"
+                        class="px-4 py-1.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                      >
+                        @if (awarding() === quote.id) {
+                          Awarding...
+                        } @else {
+                          Award
+                        }
+                      </button>
+                    }
+                  </div>
+                </div>
+
+                <!-- Quote Items -->
+                @if (quote.items?.length > 0) {
+                  <div class="mt-3 pt-3 border-t border-gray-50">
+                    <table class="w-full text-xs" role="grid" aria-label="Quote items">
+                      <thead>
+                        <tr class="text-gray-400">
+                          <th class="text-left pb-1.5 pr-4 font-medium">Item</th>
+                          <th class="text-right pb-1.5 pr-4 font-medium">Unit Price</th>
+                          <th class="text-right pb-1.5 font-medium">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (qi of quote.items; track qi.rfqItemId) {
+                          <tr class="text-gray-600">
+                            <td class="py-1 pr-4">{{ qi.materialName ?? qi.rfqItemId }}</td>
+                            <td class="py-1 pr-4 text-right font-mono">{{ qi.unitPrice | number: '1.2-2' }}</td>
+                            <td class="py-1 text-right font-mono">
+                              {{ qi.totalPrice !== undefined ? (qi.totalPrice | number: '1.2-2') : '—' }}
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
+
+<!-- Distribute Modal -->
+@if (showDistributeModal()) {
+  <div
+    class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="distribute-modal-title"
+  >
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 id="distribute-modal-title" class="text-lg font-semibold text-gray-800">Distribute RFQ</h3>
+        <button
+          (click)="closeDistribute()"
+          class="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
+          aria-label="Close modal"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <p class="text-sm text-gray-500">
+        Enter the vendor organization IDs to invite (comma-separated). The RFQ will move to <strong>OPEN</strong> status.
+      </p>
+
+      @if (distributeError()) {
+        <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2 rounded-lg" role="alert">
+          {{ distributeError() }}
+        </div>
+      }
+
+      <form [formGroup]="distributeForm" (ngSubmit)="submitDistribute()" novalidate>
+        <div>
+          <label for="vendor-org-ids" class="block text-sm font-medium text-gray-700 mb-1.5">
+            Vendor Organization IDs <span class="text-red-500">*</span>
+          </label>
+          <textarea
+            id="vendor-org-ids"
+            formControlName="vendorOrgIds"
+            rows="3"
+            placeholder="org-001, org-002, org-003"
+            class="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#940000]/20 focus:border-[#940000] resize-none"
+          ></textarea>
+        </div>
+
+        <div class="flex gap-3 justify-end pt-2">
+          <button
+            type="button"
+            (click)="closeDistribute()"
+            class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="distributing()"
+            class="px-4 py-2 text-sm font-medium text-white bg-[#940000] rounded-xl hover:bg-[#7a0000] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {{ distributing() ? 'Distributing...' : 'Distribute' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- Cancel Confirm Modal -->
+@if (showCancelConfirm()) {
+  <div
+    class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cancel-modal-title"
+  >
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 space-y-4 text-center">
+      <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto">
+        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <div>
+        <h3 id="cancel-modal-title" class="text-lg font-semibold text-gray-800">Cancel RFQ?</h3>
+        <p class="text-sm text-gray-500 mt-1">This action cannot be undone. All invited vendors will be notified.</p>
+      </div>
+      <div class="flex gap-3 justify-center">
+        <button
+          (click)="showCancelConfirm.set(false)"
+          class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+        >
+          Keep RFQ
+        </button>
+        <button
+          (click)="cancelRfq()"
+          [disabled]="cancelling()"
+          class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          {{ cancelling() ? 'Cancelling...' : 'Yes, Cancel' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
