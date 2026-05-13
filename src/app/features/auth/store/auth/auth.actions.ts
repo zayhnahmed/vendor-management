@@ -4,7 +4,7 @@ export const login = createAction('[Auth] Login', props<{ username: string; pass
 
 export const loginSuccess = createAction(
   '[Auth] Login Success',
-  props<{ refreshToken: string; requiresPasswordChange: boolean; role: string }>(),
+  props<{ refreshToken: string }>(),
 );
 
 export const loginFailure = createAction('[Auth] Login Failure', props<{ error: string }>());

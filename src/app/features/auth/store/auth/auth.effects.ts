@@ -5,8 +5,6 @@ import * as AuthActions from './auth.actions';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { TokenService } from '../../../../core/services/token/token.service';
 import { Router } from '@angular/router';
-import { getUserRole } from '../../../../core/utils/auth.util';
-import { UserRole } from '../../../../core/enums/user.enum';
 
 @Injectable()
 export class AuthEffects {
@@ -27,8 +25,6 @@ export class AuthEffects {
           map((res) =>
             AuthActions.loginSuccess({
               refreshToken: res.refresh_token,
-              requiresPasswordChange: res.requiresPasswordChange ?? false,
-              role: res.user?.role ?? '',
             }),
           ),
           catchError((err) => of(AuthActions.loginFailure({ error: err.error?.message ?? err.message }))),
@@ -54,19 +50,8 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.loginSuccess),
-        tap(({ requiresPasswordChange }) => {
-          if (requiresPasswordChange) {
-            this.router.navigate(['/auth/set-password']);
-            return;
-          }
-          const role = getUserRole(this.tokenService.getAccessToken());
-          if (role === UserRole.ADMIN || role === UserRole.SUPER_ADMIN) {
-            this.router.navigate(['/buyer']);
-          } else if (role === UserRole.VENDOR_NEW) {
-            this.router.navigate(['/supplier/onboard']);
-          } else {
-            this.router.navigate(['/supplier']);
-          }
+        tap(() => {
+          this.router.navigate(['/']);
         }),
       ),
     { dispatch: false },
@@ -76,11 +61,6 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.appLogout),
-        switchMap(() => {
-          const refreshToken = this.tokenService.getRefreshToken();
-          if (!refreshToken) return of(null);
-          return this.authService.logout(refreshToken).pipe(catchError(() => of(null)));
-        }),
         tap(() => {
           this.tokenService.clear();
           this.router.navigate(['/auth/login']);

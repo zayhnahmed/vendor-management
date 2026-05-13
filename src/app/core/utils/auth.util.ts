@@ -11,14 +11,3 @@ export function getUserRole(token: string | null): UserRole | null {
     return null;
   }
 }
-
-export function getOrganizationId(token: string | null): string | null {
-  if (!token) return null;
-
-  try {
-    const decoded: any = jwtDecode(token);
-    return decoded.organizationId ?? null;
-  } catch {
-    return null;
-  }
-}

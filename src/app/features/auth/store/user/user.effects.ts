@@ -15,7 +15,7 @@ export class AuthUserEffects {
       ofType(UserActions.loadUser),
       switchMap((_) =>
         this.authService.currentUser.pipe(
-          map((res: AuthUserApiResponse) => UserActions.loadUserSuccess({ user: res.vendor })),
+          map((res: AuthUserApiResponse) => UserActions.loadUserSuccess({ user: res.user })),
           catchError((err) => of(UserActions.loadUserFailure({ error: err.message }))),
         ),
       ),

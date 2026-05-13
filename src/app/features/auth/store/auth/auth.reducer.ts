@@ -11,11 +11,10 @@ export const authReducer = createReducer(
     error: null,
   })),
 
-  on(AuthActions.loginSuccess, (state, { refreshToken, requiresPasswordChange }) => ({
+  on(AuthActions.loginSuccess, (state, { refreshToken }) => ({
     ...state,
     loading: false,
     refreshToken,
-    requiresPasswordChange,
   })),
 
   on(AuthActions.fetchAccessTokenSuccess, (state, { accessToken }) => ({

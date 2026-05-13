@@ -4,24 +4,21 @@ export interface AuthUser {
   id: string;
   email: string;
   name: string;
-  role?: UserRole;
-  companyName: string;
-  phone?: string;
-  vendorUid?: string;
-  createdAt?: string;
-}
+  role: UserRole;
 
-export interface LoginResponse {
-  success: boolean;
-  message: string;
-  access_token: string;
-  refresh_token: string;
-  requiresPasswordChange: boolean;
-  isFirstLogin: boolean;
-  user: AuthUser;
+  companyName: string;
+  phone: string;
+  vendorUid: string;
+
+  firstLogin: boolean;
+  tempPassword: boolean;
+
+  passwordChangedAt: string;
+  lastLoginAt: string;
+  createdAt: string;
 }
 
 export interface AuthUserApiResponse {
   success: boolean;
-  vendor: AuthUser;
+  user: AuthUser;
 }
