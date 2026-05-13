@@ -25,14 +25,14 @@ export class SupplierGeneralInfo {
     this.vendorForm = this.fb.group({
       // Company Details
       companyLegalName: ['', Validators.required],
-      companyRegistrationNumber: ['', Validators.required],
-      tradeName: ['', Validators.required],
+      companyRegistrationNumber: [''],
+      tradeName: [''],
       yearOfEstablishment: [
         '',
-        [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())],
+        [Validators.min(1900), Validators.max(new Date().getFullYear())],
       ],
       countryOfRegistration: ['', Validators.required],
-      companyWebsite: ['', [Validators.required, Validators.pattern('https?://.+')]],
+      companyWebsite: ['', [Validators.pattern('https?://.+')]],
       // Entity & Business
       entityType: ['', Validators.required],
       businessType: ['', Validators.required],
