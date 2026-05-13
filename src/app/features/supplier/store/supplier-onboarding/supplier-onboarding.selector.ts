@@ -6,14 +6,14 @@ export const ONBOARDING_KEY = 'supplierOnboarding';
 export const selectSupplierOnboardingState =
   createFeatureSelector<SupplierOnboardingState>(ONBOARDING_KEY);
 
+export const selectRelationshipId = createSelector(
+  selectSupplierOnboardingState,
+  (s) => s.relationshipId,
+);
+
 export const selectSupplierCurrentStep = createSelector(
   selectSupplierOnboardingState,
   (s) => s.currentStep,
-);
-
-export const selectSupplierPrefillData = createSelector(
-  selectSupplierOnboardingState,
-  (s) => s.prefillData,
 );
 
 export const selectOnboardingLoaded = createSelector(
@@ -25,9 +25,3 @@ export const selectAllSupplierStepsCompleted = createSelector(
   selectSupplierOnboardingState,
   (s) => s.stepStatus?.allStepsCompleted || false,
 );
-
-export const selectSupplierStep1 = createSelector(selectSupplierOnboardingState, (s) => s.step1);
-
-export const selectSupplierStep2 = createSelector(selectSupplierOnboardingState, (s) => s.step2);
-
-export const selectSupplierStep3 = createSelector(selectSupplierOnboardingState, (s) => s.step3);
