@@ -5,14 +5,6 @@ import { FileUploadService } from '../../../../core/services/file-upload/file-up
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { SupplierOnboardingFacade } from '../../store/supplier-onboarding/supplier-onboarding.facade';
 
-interface Certificate {
-  type: string;
-  uploadId: string;
-  existingFileUrl?: string;
-  file?: File;
-  fileName?: string;
-}
-
 @Component({
   selector: 'app-supplier-quality-info',
   imports: [CommonModule, ReactiveFormsModule],
@@ -27,13 +19,10 @@ export class SupplierQualityInfo {
   complianceForm!: FormGroup;
   sustainabilityPractices: string[] = [];
 
-  // Using signals for reactive state
   isUploadingCertificate: WritableSignal<{ [key: number]: boolean }> = signal({});
   uploadProgress: WritableSignal<{ [key: number]: number }> = signal({});
   certificateErrors: WritableSignal<{ [key: number]: string }> = signal({});
   certificateFileNames: WritableSignal<{ [key: number]: string }> = signal({});
-  certificateUploadIds: WritableSignal<{ [key: number]: string }> = signal({});
-  existingFileUrls: WritableSignal<{ [key: number]: string }> = signal({});
 
   ngOnInit(): void {
     this.initializeForm();
@@ -49,7 +38,6 @@ export class SupplierQualityInfo {
       legalIssuesExplanation: [''],
     });
 
-    // Add conditional validator for legalIssuesExplanation
     this.complianceForm.get('hasLegalIssues')?.valueChanges.subscribe((value) => {
       const explanationControl = this.complianceForm.get('legalIssuesExplanation');
       if (value === true) {
@@ -70,9 +58,11 @@ export class SupplierQualityInfo {
 
   addCertificate(): void {
     const certificateForm = this.fb.group({
-      type: ['', Validators.required],
-      uploadId: ['', Validators.required],
-      existingFileUrl: [''],
+      name: ['', Validators.required],
+      issuing_body: [''],
+      issue_date: [''],
+      expiry_date: [''],
+      document_upload_id: [''],
     });
     this.certificates.push(certificateForm);
   }
@@ -80,38 +70,22 @@ export class SupplierQualityInfo {
   removeCertificate(index: number): void {
     this.certificates.removeAt(index);
 
-    // Clean up upload states using signal update
     this.isUploadingCertificate.update((state) => {
       const newState = { ...state };
       delete newState[index];
       return newState;
     });
-
     this.uploadProgress.update((state) => {
       const newState = { ...state };
       delete newState[index];
       return newState;
     });
-
     this.certificateErrors.update((state) => {
       const newState = { ...state };
       delete newState[index];
       return newState;
     });
-
     this.certificateFileNames.update((state) => {
-      const newState = { ...state };
-      delete newState[index];
-      return newState;
-    });
-
-    this.certificateUploadIds.update((state) => {
-      const newState = { ...state };
-      delete newState[index];
-      return newState;
-    });
-
-    this.existingFileUrls.update((state) => {
       const newState = { ...state };
       delete newState[index];
       return newState;
@@ -121,12 +95,10 @@ export class SupplierQualityInfo {
   onCertificateSelected(event: any, index: number): void {
     const file = event.target.files[0];
 
-    // Update signals
     this.certificateErrors.update((state) => ({ ...state, [index]: '' }));
     this.uploadProgress.update((state) => ({ ...state, [index]: 0 }));
 
     if (file) {
-      // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
         this.certificateErrors.update((state) => ({
           ...state,
@@ -135,7 +107,6 @@ export class SupplierQualityInfo {
         return;
       }
 
-      // Validate file type
       const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
       if (!allowedTypes.includes(file.type)) {
         this.certificateErrors.update((state) => ({
@@ -161,20 +132,8 @@ export class SupplierQualityInfo {
           this.uploadProgress.update((state) => ({ ...state, [index]: progress }));
         } else if (event.type === HttpEventType.Response) {
           if (event.body && event.body.uploadId) {
-            this.certificateUploadIds.update((state) => ({
-              ...state,
-              [index]: event.body.uploadId,
-            }));
-
-            // Update form control with upload ID
             const certificateGroup = this.certificates.at(index) as FormGroup;
-            certificateGroup.get('uploadId')?.setValue(event.body.uploadId);
-
-            if (event.body.fileUrl) {
-              this.existingFileUrls.update((state) => ({ ...state, [index]: event.body.fileUrl }));
-              certificateGroup.get('existingFileUrl')?.setValue(event.body.fileUrl);
-            }
-
+            certificateGroup.get('document_upload_id')?.setValue(event.body.uploadId);
             this.isUploadingCertificate.update((state) => ({ ...state, [index]: false }));
           } else {
             this.certificateErrors.update((state) => ({
@@ -185,14 +144,13 @@ export class SupplierQualityInfo {
           }
         }
       },
-      error: (error) => {
+      error: () => {
         this.certificateErrors.update((state) => ({
           ...state,
           [index]: 'Failed to upload certificate. Please try again.',
         }));
         this.isUploadingCertificate.update((state) => ({ ...state, [index]: false }));
         this.uploadProgress.update((state) => ({ ...state, [index]: 0 }));
-        console.error('Upload error:', error);
       },
     });
   }
@@ -203,11 +161,6 @@ export class SupplierQualityInfo {
 
   getCertificateFileName(index: number): string {
     return this.certificateFileNames()[index] || '';
-  }
-
-  getExistingFileUrl(index: number): string {
-    const certificateGroup = this.certificates.at(index) as FormGroup;
-    return certificateGroup.get('existingFileUrl')?.value || '';
   }
 
   getIsUploading(index: number): boolean {
@@ -258,35 +211,40 @@ export class SupplierQualityInfo {
         cert.markAllAsTouched();
         isValid = false;
       }
-      if (!cert.get('uploadId')?.value) {
-        this.certificateErrors.update((state) => ({
-          ...state,
-          [i]: 'Please upload certificate file',
-        }));
-        isValid = false;
-      }
     }
     return isValid;
   }
 
+  private buildPayload(): object {
+    const certifications = this.certificates.value.map(
+      (cert: {
+        name: string;
+        issuing_body: string;
+        issue_date: string;
+        expiry_date: string;
+        document_upload_id: string;
+      }) => ({
+        name: cert.name,
+        ...(cert.issuing_body && { issuing_body: cert.issuing_body }),
+        ...(cert.issue_date && { issue_date: cert.issue_date }),
+        ...(cert.expiry_date && { expiry_date: cert.expiry_date }),
+        ...(cert.document_upload_id && { document_upload_id: cert.document_upload_id }),
+      }),
+    );
+
+    const formValue = { ...this.complianceForm.value };
+    delete formValue['certificates'];
+
+    return {
+      ...formValue,
+      certifications,
+      sustainabilityPractices: this.sustainabilityPractices,
+    };
+  }
+
   onSubmit(): void {
     if (this.complianceForm.valid && this.validateCertificates()) {
-      const certificates = this.certificates.value.map((cert: any, index: number) => ({
-        type: cert.type,
-        uploadId: cert.uploadId,
-        ...(cert.existingFileUrl && { existingFileUrl: cert.existingFileUrl }),
-      }));
-
-      const payload = {
-        action: 'save',
-        ...this.complianceForm.value,
-        certifications: certificates,
-        sustainabilityPractices: this.sustainabilityPractices,
-      };
-      delete payload.certificates;
-      console.log('Save draft payload:', payload);
-      this.facade.finalSubmitForm(payload);
-      // Call your API to save the data
+      this.facade.finalSubmitForm(this.buildPayload());
     } else {
       this.markFormGroupTouched(this.complianceForm);
       this.validateCertificates();
@@ -294,24 +252,8 @@ export class SupplierQualityInfo {
   }
 
   onSave(): void {
-    // Similar to onSave but with draft flag
     if (this.complianceForm.valid && this.validateCertificates()) {
-      const certificates = this.certificates.value.map((cert: any, index: number) => ({
-        type: cert.type,
-        uploadId: cert.uploadId,
-        ...(cert.existingFileUrl && { existingFileUrl: cert.existingFileUrl }),
-      }));
-
-      const payload = {
-        action: 'save',
-        ...this.complianceForm.value,
-        certifications: certificates,
-        sustainabilityPractices: this.sustainabilityPractices,
-      };
-      delete payload.certificates;
-      console.log('Save draft payload:', payload);
-      this.facade.submitForm(3, payload);
-      // Call your API to save the data
+      this.facade.submitForm(3, this.buildPayload());
     } else {
       this.markFormGroupTouched(this.complianceForm);
       this.validateCertificates();
