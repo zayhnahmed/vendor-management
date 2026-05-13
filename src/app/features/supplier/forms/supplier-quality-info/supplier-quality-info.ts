@@ -61,32 +61,7 @@ export class SupplierQualityInfo {
       explanationControl?.updateValueAndValidity();
     });
 
-    this.facade.loadInitialQualityInfoData().subscribe((data) => {
-      if (!data) {
-        // Add one empty certificate by default
-        this.addCertificate();
-        return;
-      }
-
-      if (data?.certifications) {
-        data.certifications.forEach((cert: any, index: number) => {
-          const certificateForm = this.fb.group({
-            type: [cert.type, Validators.required],
-            // If each cert has its own ID, use cert.uploadId.
-            // If it's a shared array, ensure you're picking the right index.
-            uploadId: [data.certificationUploadIds?.[index] || '', Validators.required],
-            existingFileUrl: [cert.fileUrl],
-          });
-
-          this.certificates.push(certificateForm);
-        });
-      }
-
-      this.complianceForm.patchValue(data);
-      this.sustainabilityPractices = data?.sustainabilityPractices;
-      this.existingFileUrls.set(data?.certifications?.map((data: any) => data.fileUrl));
-      this.certificateUploadIds.set(data?.certificationUploadIds);
-    });
+    this.addCertificate();
   }
 
   get certificates(): FormArray {
