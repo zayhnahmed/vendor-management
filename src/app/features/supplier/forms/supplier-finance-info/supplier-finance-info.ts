@@ -45,10 +45,6 @@ export class SupplierFinanceInfo {
       yearsInBusiness: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
     });
 
-    this.facade.loadInitialFinancialInfoData().subscribe((data) => {
-      this.financialForm.patchValue(data);
-      this.taxCertificateUploadId = data?.taxCertificateUploadId;
-    });
   }
 
   onTaxCertificateSelected(event: any): void {
