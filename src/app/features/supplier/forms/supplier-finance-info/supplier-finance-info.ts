@@ -36,11 +36,11 @@ export class SupplierFinanceInfo {
       bankCode: ['', [Validators.required, Validators.minLength(4)]],
       accountHolderName: ['', [Validators.required, Validators.minLength(2)]],
       accountNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{8,20}$/)]],
-      iban: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}[0-9]{2}[A-Z0-9]{1,30}$/)]],
+      iban: ['', [Validators.pattern(/^[A-Z]{2}[0-9]{2}[A-Z0-9]{1,30}$/)]],
       bankCountry: ['', Validators.required],
       currency: ['', Validators.required],
       taxRegistrationNumber: ['', [Validators.required, Validators.minLength(5)]],
-      vatGstNumber: ['', [Validators.required, Validators.minLength(5)]],
+      vatGstNumber: ['', [Validators.minLength(5)]],
       annualTurnover: ['', [Validators.required, Validators.min(0)]],
       yearsInBusiness: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
     });
