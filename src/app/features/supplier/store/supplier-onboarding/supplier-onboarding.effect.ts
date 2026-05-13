@@ -1,148 +1,79 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
+import { withLatestFrom } from 'rxjs/operators';
 import * as OnboardingActions from './supplier-onboarding.actions';
 import { SupplierOnboardService } from '../../services/supplier-onboard/supplier-onboard.service';
-import {  } from './supplier-onboarding.state';
-import { SupplierStepData } from '../../../request/models/suplier-detail.model';
+import { Store } from '@ngrx/store';
+import { selectRelationshipId } from './supplier-onboarding.selector';
 
 @Injectable()
 export class SupplierOnboardingEffects {
   private actions$ = inject(Actions);
-  private _service = inject(SupplierOnboardService);
-  public get service() {
-    return this._service;
-  }
-  public set service(value) {
-    this._service = value;
-  }
+  private service = inject(SupplierOnboardService);
+  private store = inject(Store);
 
-  // Load status
   loadStatus$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OnboardingActions.loadSupplierOnboardingStatus),
-      switchMap(() =>
-        this.service.getStatus().pipe(
+      withLatestFrom(this.store.select(selectRelationshipId)),
+      switchMap(([, relationshipId]) => {
+        if (!relationshipId) {
+          return of(OnboardingActions.loadSupplierOnboardingStatusFailure({ error: 'No relationship ID set' }));
+        }
+        return this.service.getStatus(relationshipId).pipe(
           map((res) =>
-            OnboardingActions.loadSupplierOnboardingStatusSuccess({
-              stepStatus: res.stepStatus,
-            }),
+            OnboardingActions.loadSupplierOnboardingStatusSuccess({ stepStatus: res.stepStatus }),
           ),
           catchError((err) =>
-            of(
-              OnboardingActions.loadSupplierOnboardingStatusFailure({
-                error: err.message,
-              }),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-
-  // Load prefill data
-  loadPrefillData$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(OnboardingActions.loadSupplierPrefillData),
-      switchMap(() => {
-        return this.service.getPrefillData()!.pipe(
-          map((data) => OnboardingActions.loadSupplierPrefillDataSuccess({ data: data.preFilled })),
-          catchError((error) =>
-            of(OnboardingActions.loadSupplierPrefillDataFailure({ error: error })),
+            of(OnboardingActions.loadSupplierOnboardingStatusFailure({ error: err.message })),
           ),
         );
       }),
     ),
   );
 
-  // Load step
-  loadStep$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(OnboardingActions.loadSupplierStep),
-      mergeMap(({ step }) => {
-        let api$: Observable<SupplierStepData<1 | 2 | 3>>;
-
-        switch (step) {
-          case 1:
-            api$ = this.service.getGeneralInfo();
-            break;
-          case 2:
-            api$ = this.service.getFinanceInfo();
-            break;
-          case 3:
-            api$ = this.service.getQualityInfo();
-            break;
-        }
-
-        return api$!.pipe(
-          map((data) => OnboardingActions.loadSupplierStepSuccess({ step, data: data })),
-        );
-      }),
-    ),
-  );
-
-  // Save / Submit
   saveOrSubmit$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OnboardingActions.submitSupplierStep),
-      switchMap(({ step, payload }) => {
-        let api$;
-
-        switch (step) {
-          case 1:
-            api$ = this.service.saveGeneralInfo(payload as SupplierStepData<1>);
-            break;
-          case 2:
-            api$ = this.service.saveFinanceInfo(payload as SupplierStepData<2>);
-            break;
-          case 3:
-            api$ = this.service.saveQualityInfo(payload as SupplierStepData<3>);
-            break;
+      withLatestFrom(this.store.select(selectRelationshipId)),
+      switchMap(([{ step, payload }, relationshipId]) => {
+        if (!relationshipId) {
+          return of(OnboardingActions.loadSupplierOnboardingStatusFailure({ error: 'No relationship ID set' }));
         }
 
-        return api$!.pipe(
-          // 🔥 after success → reload step
-          //   map(() => OnboardingActions.loadSupplierStep({ step })),
+        let api$;
+        switch (step) {
+          case 1: api$ = this.service.saveStep1(relationshipId, payload); break;
+          case 2: api$ = this.service.saveStep2(relationshipId, payload); break;
+          case 3: api$ = this.service.saveStep3(relationshipId, payload); break;
+          default: api$ = this.service.saveStep1(relationshipId, payload);
+        }
+
+        return api$.pipe(
           map(() => OnboardingActions.loadSupplierOnboardingStatus()),
+          catchError((err) =>
+            of(OnboardingActions.loadSupplierOnboardingStatusFailure({ error: err.message })),
+          ),
         );
       }),
     ),
   );
 
-  // Final Submit
   finalSubmit$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OnboardingActions.finalSubmitSupplierStep),
-      switchMap(({ payload }) => {
-        return this.service
-          .submitFinalInfo(payload as SupplierStepData<3>)!
-          .pipe(map(() => OnboardingActions.loadSupplierOnboardingStatus()));
-      }),
-    ),
-  );
-
-  // Update
-  update$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(OnboardingActions.updateSupplierStep),
-      switchMap(({ step, payload }) => {
-        let api$;
-
-        switch (step) {
-          case 1:
-            api$ = this.service.updateGeneralInfo(payload as SupplierStepData<1>);
-            break;
-          case 2:
-            api$ = this.service.updateFinanceInfo(payload as SupplierStepData<2>);
-            break;
-          case 3:
-            api$ = this.service.updateQualityInfo(payload as SupplierStepData<3>);
-            break;
+      withLatestFrom(this.store.select(selectRelationshipId)),
+      switchMap(([{ payload }, relationshipId]) => {
+        if (!relationshipId) {
+          return of(OnboardingActions.loadSupplierOnboardingStatusFailure({ error: 'No relationship ID set' }));
         }
-
-        return api$!.pipe(
-          // 🔥 after success → reload step
+        return this.service.saveStep3(relationshipId, payload).pipe(
+          switchMap(() => this.service.submit(relationshipId)),
           map(() => OnboardingActions.loadSupplierOnboardingStatus()),
+          catchError((err) =>
+            of(OnboardingActions.loadSupplierOnboardingStatusFailure({ error: err.message })),
+          ),
         );
       }),
     ),
