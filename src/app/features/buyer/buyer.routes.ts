@@ -5,6 +5,9 @@ import { SupplierRequestPage } from './pages/supplier-request.page/supplier-requ
 import { SupplierRegRequestPage } from './pages/supplier-reg-request.page/supplier-reg-request.page';
 import { SupplierRequestViewPage } from '../request/pages/supplier-request-view.page/supplier-request-view.page';
 import { SupplierRegRequestViewPage } from '../request/pages/supplier-reg-request-view.page/supplier-reg-request-view.page';
+import { RfqListPage } from './pages/rfq-list.page/rfq-list.page';
+import { RfqCreatePage } from './pages/rfq-create.page/rfq-create.page';
+import { RfqDetailPage } from './pages/rfq-detail.page/rfq-detail.page';
 
 export const routes: Routes = [
   {
@@ -30,5 +33,17 @@ export const routes: Routes = [
   {
     path: 'registration-requests/:id',
     component: SupplierRegRequestViewPage,
+  },
+  {
+    path: 'rfqs',
+    component: RfqListPage,
+  },
+  {
+    path: 'rfqs/create',
+    component: RfqCreatePage,
+  },
+  {
+    path: 'rfqs/:id',
+    component: RfqDetailPage,
   },
 ];
