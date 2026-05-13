@@ -53,31 +53,62 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6">
-              <!-- Certificate Type -->
+              <!-- Certificate Name -->
               <div class="space-y-1.5 sm:space-y-2">
-                <label class="block text-sm font-medium text-heading"> Certificate Type* </label>
+                <label class="block text-sm font-medium text-heading"> Certificate Name* </label>
                 <select
-                  formControlName="type"
+                  formControlName="name"
                   class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
                 >
-                  <option value="">Select certificate type</option>
-                  <option value="ISO9001">ISO 9001 - Quality Management</option>
-                  <option value="ISO14001">ISO 14001 - Environmental Management</option>
-                  <option value="ISO45001">ISO 45001 - Occupational Health & Safety</option>
-                  <option value="ISO27001">ISO 27001 - Information Security</option>
-                  <option value="CE">CE Marking</option>
-                  <option value="UL">UL Certification</option>
+                  <option value="">Select certificate</option>
+                  <option value="ISO 9001">ISO 9001 - Quality Management</option>
+                  <option value="ISO 14001">ISO 14001 - Environmental Management</option>
+                  <option value="ISO 45001">ISO 45001 - Occupational Health &amp; Safety</option>
+                  <option value="ISO 27001">ISO 27001 - Information Security</option>
+                  <option value="CE Marking">CE Marking</option>
+                  <option value="UL Certification">UL Certification</option>
                   <option value="GOTS">GOTS - Global Organic Textile Standard</option>
-                  <option value="HALAL">Halal Certification</option>
-                  <option value="OTHER">Other</option>
+                  <option value="Halal Certification">Halal Certification</option>
+                  <option value="Other">Other</option>
                 </select>
-                @if (cert.get('type')?.invalid && cert.get('type')?.touched) {
-                  <div class="text-red-500 text-xs mt-1">Certificate type is required.</div>
+                @if (cert.get('name')?.invalid && cert.get('name')?.touched) {
+                  <div class="text-red-500 text-xs mt-1">Certificate name is required.</div>
                 }
               </div>
 
-              <!-- Certificate File Upload -->
+              <!-- Issuing Body -->
               <div class="space-y-1.5 sm:space-y-2">
+                <label class="block text-sm font-medium text-heading"> Issuing Body </label>
+                <input
+                  type="text"
+                  formControlName="issuing_body"
+                  placeholder="e.g. BSI"
+                  class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                />
+              </div>
+
+              <!-- Issue Date -->
+              <div class="space-y-1.5 sm:space-y-2">
+                <label class="block text-sm font-medium text-heading"> Issue Date </label>
+                <input
+                  type="date"
+                  formControlName="issue_date"
+                  class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                />
+              </div>
+
+              <!-- Expiry Date -->
+              <div class="space-y-1.5 sm:space-y-2">
+                <label class="block text-sm font-medium text-heading"> Expiry Date </label>
+                <input
+                  type="date"
+                  formControlName="expiry_date"
+                  class="bg-white border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"
+                />
+              </div>
+
+              <!-- Certificate File Upload -->
+              <div class="space-y-1.5 sm:space-y-2 sm:col-span-2">
                 <label class="block text-sm font-medium text-heading"> Certificate File* </label>
                 <div class="flex items-center justify-center w-full">
                   <label
@@ -163,11 +194,6 @@
                       />
                     </svg>
                     Uploaded: {{ getCertificateFileName(i) }}
-                  </div>
-                }
-                @if (getExistingFileUrl(i)) {
-                  <div class="text-blue-600 text-xs mt-1">
-                    Existing file: {{ getExistingFileUrl(i) }}
                   </div>
                 }
                 @if (getIsUploading(i) && getUploadProgress(i) > 0 && getUploadProgress(i) < 100) {
