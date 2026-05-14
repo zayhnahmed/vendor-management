@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Rfq, Quote, RfqService } from '../../services/rfq/rfq.service';
+import { PoService } from '../../services/po/po.service';
 
 @Component({
   selector: 'app-rfq-detail',
@@ -15,6 +16,7 @@ export class RfqDetailPage implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private rfqService = inject(RfqService);
+  private poService = inject(PoService);
   private fb = inject(FormBuilder);
 
   rfq = signal<Rfq | null>(null);
@@ -28,6 +30,7 @@ export class RfqDetailPage implements OnInit {
   distributing = signal(false);
   cancelling = signal(false);
   awarding = signal<string | null>(null);
+  creatingPo = signal<string | null>(null);
   distributeError = signal<string | null>(null);
 
   distributeForm: FormGroup = this.fb.group({
@@ -138,6 +141,17 @@ export class RfqDetailPage implements OnInit {
         this.cancelling.set(false);
         this.showCancelConfirm.set(false);
       },
+    });
+  }
+
+  createPoFromRfq(quoteId: string): void {
+    this.creatingPo.set(quoteId);
+    this.poService.createFromRfq({ rfqId: this.rfqId, quoteId }).subscribe({
+      next: (res) => {
+        this.creatingPo.set(null);
+        this.router.navigate(['/buyer/purchase-orders', res.data.id]);
+      },
+      error: () => this.creatingPo.set(null),
     });
   }
 
