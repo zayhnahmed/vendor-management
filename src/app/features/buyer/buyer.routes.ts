@@ -8,6 +8,9 @@ import { SupplierRegRequestViewPage } from '../request/pages/supplier-reg-reques
 import { RfqListPage } from './pages/rfq-list.page/rfq-list.page';
 import { RfqCreatePage } from './pages/rfq-create.page/rfq-create.page';
 import { RfqDetailPage } from './pages/rfq-detail.page/rfq-detail.page';
+import { PoListPage } from './pages/po-list.page/po-list.page';
+import { PoCreatePage } from './pages/po-create.page/po-create.page';
+import { PoDetailPage } from './pages/po-detail.page/po-detail.page';
 
 export const routes: Routes = [
   {
@@ -45,5 +48,17 @@ export const routes: Routes = [
   {
     path: 'rfqs/:id',
     component: RfqDetailPage,
+  },
+  {
+    path: 'purchase-orders',
+    component: PoListPage,
+  },
+  {
+    path: 'purchase-orders/create',
+    component: PoCreatePage,
+  },
+  {
+    path: 'purchase-orders/:id',
+    component: PoDetailPage,
   },
 ];
