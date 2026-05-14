@@ -167,6 +167,15 @@
                         }
                       </button>
                     }
+                    @if (rfq()!.status === 'AWARDED') {
+                      <button
+                        (click)="createPoFromRfq(quote.id)"
+                        [disabled]="creatingPo() === quote.id"
+                        class="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                      >
+                        {{ creatingPo() === quote.id ? 'Creating...' : 'Create PO' }}
+                      </button>
+                    }
                   </div>
                 </div>
 
