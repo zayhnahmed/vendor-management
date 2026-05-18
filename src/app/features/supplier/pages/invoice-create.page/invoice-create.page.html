@@ -1,0 +1,118 @@
+<div class="max-w-2xl mx-auto p-6 space-y-6">
+
+  <!-- Back -->
+  <button (click)="goBack()" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[#940000] transition-colors">
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
+    </svg>
+    Back to Invoices
+  </button>
+
+  <!-- Header -->
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Create Invoice</h1>
+    <p class="text-sm text-gray-500 mt-1">Raise an invoice for a delivered purchase order</p>
+  </div>
+
+  <!-- Form Card -->
+  <form [formGroup]="form" (ngSubmit)="submit()" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-6" novalidate>
+
+    <!-- Purchase Order -->
+    <div>
+      <label for="po-select" class="block text-sm font-medium text-gray-700 mb-1.5">
+        Purchase Order <span class="text-red-500" aria-hidden="true">*</span>
+      </label>
+      @if (loadingPos()) {
+        <div class="h-10 bg-gray-100 animate-pulse rounded-xl"></div>
+      } @else if (deliveredPos().length === 0) {
+        <div class="rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-700">
+          No delivered purchase orders found. Invoices can only be raised for delivered POs.
+        </div>
+      } @else {
+        <select id="po-select" formControlName="purchaseOrderId" (change)="onPoSelect($event)"
+          class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#940000]/30 focus:border-[#940000] bg-white"
+          [class]="isInvalid('purchaseOrderId') ? 'border-red-400' : 'border-gray-200'"
+          aria-required="true">
+          <option value="">— Select a Purchase Order —</option>
+          @for (po of deliveredPos(); track po.id) {
+            <option [value]="po.id">
+              {{ po.id.slice(0,8) }}… — {{ po.vendorName ?? 'Unknown' }} — {{ po.totalAmount | number:'1.2-2' }}
+            </option>
+          }
+        </select>
+        @if (isInvalid('purchaseOrderId')) {
+          <p class="mt-1 text-xs text-red-600" role="alert">Please select a purchase order.</p>
+        }
+      }
+    </div>
+
+    <!-- Amount + Currency -->
+    <div class="grid grid-cols-3 gap-4">
+      <div class="col-span-2">
+        <label for="amount" class="block text-sm font-medium text-gray-700 mb-1.5">
+          Amount <span class="text-red-500" aria-hidden="true">*</span>
+        </label>
+        <input id="amount" type="number" formControlName="amount" min="0.01" step="0.01"
+          placeholder="0.00"
+          class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#940000]/30 focus:border-[#940000]"
+          [class]="isInvalid('amount') ? 'border-red-400' : 'border-gray-200'"
+          aria-required="true"/>
+        @if (isInvalid('amount')) {
+          <p class="mt-1 text-xs text-red-600" role="alert">Please enter a valid amount.</p>
+        }
+      </div>
+      <div>
+        <label for="currency" class="block text-sm font-medium text-gray-700 mb-1.5">Currency</label>
+        <select id="currency" formControlName="currency"
+          class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#940000]/30 focus:border-[#940000] bg-white">
+          <option value="SAR">SAR</option>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="AED">AED</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Due Date -->
+    <div>
+      <label for="due-date" class="block text-sm font-medium text-gray-700 mb-1.5">
+        Due Date <span class="text-red-500" aria-hidden="true">*</span>
+      </label>
+      <input id="due-date" type="date" formControlName="dueDate"
+        class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#940000]/30 focus:border-[#940000]"
+        [class]="isInvalid('dueDate') ? 'border-red-400' : 'border-gray-200'"
+        aria-required="true"/>
+      @if (isInvalid('dueDate')) {
+        <p class="mt-1 text-xs text-red-600" role="alert">Please set a due date.</p>
+      }
+    </div>
+
+    <!-- Notes -->
+    <div>
+      <label for="notes" class="block text-sm font-medium text-gray-700 mb-1.5">Notes <span class="text-gray-400 font-normal">(optional)</span></label>
+      <textarea id="notes" formControlName="notes" rows="3" placeholder="Add any payment instructions or notes…"
+        class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#940000]/30 focus:border-[#940000] resize-none">
+      </textarea>
+    </div>
+
+    <!-- Submit Error -->
+    @if (submitError()) {
+      <div class="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700" role="alert">{{ submitError() }}</div>
+    }
+
+    <!-- Actions -->
+    <div class="flex gap-3 justify-end pt-2">
+      <button type="button" (click)="goBack()" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">
+        Cancel
+      </button>
+      <button type="submit" [disabled]="submitting() || deliveredPos().length === 0"
+        class="px-6 py-2.5 text-sm font-semibold text-white bg-[#940000] rounded-xl hover:bg-[#7a0000] transition-colors disabled:opacity-50 flex items-center gap-2 shadow-sm">
+        @if (submitting()) {
+          <span class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" aria-hidden="true"></span>
+        }
+        Create Invoice
+      </button>
+    </div>
+
+  </form>
+</div>
