@@ -67,10 +67,16 @@
         <span>
           <span class="font-medium text-gray-700">Items:</span> {{ rfq()!.items?.length ?? 0 }}
         </span>
-        @if (rfq()!.deadline) {
+        @if (rfq()!.submissionDeadline) {
           <span>
-            <span class="font-medium text-gray-700">Deadline:</span>
-            {{ rfq()!.deadline | date: 'dd MMM yyyy' }}
+            <span class="font-medium text-gray-700">Submission by:</span>
+            {{ rfq()!.submissionDeadline | date: 'dd MMM yyyy' }}
+          </span>
+        }
+        @if (rfq()!.deliveryDeadline) {
+          <span>
+            <span class="font-medium text-gray-700">Delivery by:</span>
+            {{ rfq()!.deliveryDeadline | date: 'dd MMM yyyy' }}
           </span>
         }
         <span>
@@ -113,7 +119,7 @@
                 <td class="py-3 pr-4 text-gray-700">{{ item.materialName ?? '—' }}</td>
                 <td class="py-3 pr-4 font-medium text-gray-800">{{ item.quantity }}</td>
                 <td class="py-3 pr-4 text-gray-600">{{ item.unit ?? '—' }}</td>
-                <td class="py-3 text-gray-500">{{ item.description ?? '—' }}</td>
+                <td class="py-3 text-gray-500">{{ item.specifications ?? '—' }}</td>
               </tr>
             }
           </tbody>
@@ -180,7 +186,7 @@
                 </div>
 
                 <!-- Quote Items -->
-                @if (quote.items?.length > 0) {
+                @if ((quote.items?.length ?? 0) > 0) {
                   <div class="mt-3 pt-3 border-t border-gray-50">
                     <table class="w-full text-xs" role="grid" aria-label="Quote items">
                       <thead>
