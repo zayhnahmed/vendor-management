@@ -11,6 +11,10 @@ import { RfqDetailPage } from './pages/rfq-detail.page/rfq-detail.page';
 import { PoListPage } from './pages/po-list.page/po-list.page';
 import { PoCreatePage } from './pages/po-create.page/po-create.page';
 import { PoDetailPage } from './pages/po-detail.page/po-detail.page';
+import { VendorOnboardingListPage } from './pages/vendor-onboarding-list.page/vendor-onboarding-list.page';
+import { VendorOnboardingDetailPage } from './pages/vendor-onboarding-detail.page/vendor-onboarding-detail.page';
+import { BuyerInvoiceListPage } from './pages/invoice-list.page/invoice-list.page';
+import { BuyerInvoiceDetailPage } from './pages/invoice-detail.page/invoice-detail.page';
 
 export const routes: Routes = [
   {
@@ -60,5 +64,21 @@ export const routes: Routes = [
   {
     path: 'purchase-orders/:id',
     component: PoDetailPage,
+  },
+  {
+    path: 'vendor-onboarding',
+    component: VendorOnboardingListPage,
+  },
+  {
+    path: 'vendor-onboarding/:id',
+    component: VendorOnboardingDetailPage,
+  },
+  {
+    path: 'invoices',
+    component: BuyerInvoiceListPage,
+  },
+  {
+    path: 'invoices/:id',
+    component: BuyerInvoiceDetailPage,
   },
 ];
