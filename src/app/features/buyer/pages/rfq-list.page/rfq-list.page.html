@@ -116,7 +116,7 @@
                 </td>
                 <td class="px-5 py-4 text-gray-600">{{ rfq.items?.length ?? 0 }} items</td>
                 <td class="px-5 py-4 text-gray-600">
-                  {{ rfq.deadline ? (rfq.deadline | date: 'dd MMM yyyy') : '—' }}
+                  {{ rfq.submissionDeadline ? (rfq.submissionDeadline | date: 'dd MMM yyyy') : '—' }}
                 </td>
                 <td class="px-5 py-4 text-gray-500 text-xs">
                   {{ rfq.createdAt | date: 'dd MMM yyyy' }}

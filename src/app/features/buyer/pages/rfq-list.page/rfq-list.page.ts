@@ -47,7 +47,7 @@ export class RfqListPage implements OnInit {
     return data;
   });
 
-  counts = computed(() => ({
+  counts = computed((): Record<string, number> => ({
     ALL: this.rfqs().length,
     DRAFT: this.rfqs().filter((r) => r.status === 'DRAFT').length,
     OPEN: this.rfqs().filter((r) => r.status === 'OPEN').length,
