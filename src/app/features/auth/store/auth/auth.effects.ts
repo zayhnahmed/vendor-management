@@ -5,6 +5,8 @@ import * as AuthActions from './auth.actions';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { TokenService } from '../../../../core/services/token/token.service';
 import { Router } from '@angular/router';
+import { getUserRole } from '../../../../core/utils/auth.util';
+import { UserRole } from '../../../../core/enums/user.enum';
 
 @Injectable()
 export class AuthEffects {
@@ -38,7 +40,7 @@ export class AuthEffects {
       ofType(AuthActions.loginSuccess, AuthActions.fetchAccessToken),
       switchMap((action: any) =>
         this.authService.fetchAccessToken(action.refreshToken).pipe(
-          map((res: any) =>
+          map((res) =>
             AuthActions.fetchAccessTokenSuccess({ accessToken: res.access_token }),
           ),
         ),
@@ -51,7 +53,17 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(AuthActions.loginSuccess),
         tap(() => {
-          this.router.navigate(['/']);
+          const token = this.tokenService.getAccessToken();
+          const role = getUserRole(token);
+          if (role === UserRole.BUYER || role === UserRole.SUPER_ADMIN || role === UserRole.ADMIN) {
+            this.router.navigate(['/buyer']);
+          } else if (role === UserRole.VENDOR_ACTIVE) {
+            this.router.navigate(['/supplier']);
+          } else if (role === UserRole.VENDOR_NEW) {
+            this.router.navigate(['/supplier/onboard']);
+          } else {
+            this.router.navigate(['/error/unauthorized']);
+          }
         }),
       ),
     { dispatch: false },
