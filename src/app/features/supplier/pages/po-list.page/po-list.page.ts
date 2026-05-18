@@ -48,7 +48,7 @@ export class SupplierPoListPage implements OnInit {
     return data;
   });
 
-  counts = computed(() => {
+  counts = computed((): Record<string, number> => {
     const all = this.pos();
     const byStatus = (s: string) => all.filter((p) => p.status === s).length;
     return {
