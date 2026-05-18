@@ -11,29 +11,16 @@ import {
   setRelationshipId,
   submitSupplierStep,
 } from './supplier-onboarding.actions';
-import { SupplierOnboardService } from '../../services/supplier-onboard/supplier-onboard.service';
-
 @Injectable({ providedIn: 'root' })
 export class SupplierOnboardingFacade {
   private store = inject(Store);
-  private service = inject(SupplierOnboardService);
 
   currentStep$ = this.store.select(selectSupplierCurrentStep);
   loaded$ = this.store.select(selectOnboardingLoaded);
   relationshipId$ = this.store.select(selectRelationshipId);
 
   initOnboarding() {
-    this.service.getPendingTasks().subscribe({
-      next: (res: any) => {
-        const tasks = res?.data ?? res;
-        const first = Array.isArray(tasks) ? tasks[0] : null;
-        if (first?.relationshipId) {
-          this.store.dispatch(setRelationshipId({ relationshipId: first.relationshipId }));
-        }
-        this.store.dispatch(loadSupplierOnboardingStatus());
-      },
-      error: () => this.store.dispatch(loadSupplierOnboardingStatus()),
-    });
+    this.store.dispatch(loadSupplierOnboardingStatus());
   }
 
   setRelationshipId(relationshipId: string) {
