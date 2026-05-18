@@ -4,6 +4,9 @@ import { SupplierRfqListPage } from './pages/rfq-list.page/rfq-list.page';
 import { SupplierRfqDetailPage } from './pages/rfq-detail.page/rfq-detail.page';
 import { SupplierPoListPage } from './pages/po-list.page/po-list.page';
 import { SupplierPoDetailPage } from './pages/po-detail.page/po-detail.page';
+import { SupplierInvoiceListPage } from './pages/invoice-list.page/invoice-list.page';
+import { SupplierInvoiceCreatePage } from './pages/invoice-create.page/invoice-create.page';
+import { SupplierInvoiceDetailPage } from './pages/invoice-detail.page/invoice-detail.page';
 
 export const routes: Routes = [
   {
@@ -25,5 +28,17 @@ export const routes: Routes = [
   {
     path: 'purchase-orders/:id',
     component: SupplierPoDetailPage,
+  },
+  {
+    path: 'invoices',
+    component: SupplierInvoiceListPage,
+  },
+  {
+    path: 'invoices/create',
+    component: SupplierInvoiceCreatePage,
+  },
+  {
+    path: 'invoices/:id',
+    component: SupplierInvoiceDetailPage,
   },
 ];
