@@ -44,7 +44,7 @@ export const supplierGuard: CanActivateFn = (_, __) => {
     );
   }
 
-  if (role === UserRole.SUPER_ADMIN) {
+  if (role === UserRole.SUPER_ADMIN || role === UserRole.BUYER || role === UserRole.ADMIN) {
     return router.createUrlTree(['/buyer']);
   }
 
